@@ -2,6 +2,12 @@ name: "build"
 on:
   pull_request:
   push:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'nixpkgs commit'
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-24.04-arm
@@ -12,5 +18,9 @@ jobs:
       with:
         name: klozher
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix build .#wine
+    - run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          nix flake lock --override-input nixpkgs github:NixOS/nixpkgs/${{ github.event.inputs.commit }}
+        fi
+        nix build .#wine
 
