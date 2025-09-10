@@ -1,6 +1,6 @@
 {
     inputs = {
-        nixpkgs.url = "github:NixOS/nixpkgs/8eb28adfa3dc4de28e792e3bf49fcf9007ca8ac9";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     };
     outputs = {self, nixpkgs, ...}: {
         packages.aarch64-linux.wine = with nixpkgs.legacyPackages.aarch64-linux; wineWow64Packages.minimal.overrideAttrs
