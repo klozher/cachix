@@ -22,5 +22,5 @@ jobs:
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
           nix flake lock --override-input nixpkgs github:NixOS/nixpkgs/${{ github.event.inputs.commit }}
         fi
-        nix build .#wine
+        nix build -L .#wine
 
