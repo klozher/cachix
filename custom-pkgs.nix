@@ -6,12 +6,14 @@
     applyPatches,
     writeText,
     writeShellApplication,
+    symlinkJoin,
+    linuxPackages_custom,
 
     meson,
     ninja,
     pkg-config,
+    pkgsCross,
 
-    linuxPackages_custom,
     coreutils,
     android-tools,
     gzip,
@@ -21,12 +23,12 @@
 
     linuxHeaders,
     bluez,
-    symlinkJoin,
     alsa-ucm-conf,
     libqmi,
     protobuf,
     protobufc,
     iio-sensor-proxy,
+    wineWow64Packages,
     ...
 }@args: rec {
     void-pipa = fetchFromGitHub {
@@ -189,5 +191,25 @@
             sed -i "s/ ssc-light ssc-proximity ssc-compass//g" $out/lib/udev/rules.d/80-iio-sensor-proxy.rules
             cp ${void-pipa}/packages/pipa-sensors/files/81-libssc-xiaomi-pipa.rules $out/lib/udev/rules.d/
         '';
+    });
+    wine-aarch64 = wineWow64Packages.full.overrideAttrs (prevAttrs: with pkgsCross.ucrtAarch64.buildPackages.llvmPackages; {
+        meta.platforms = prevAttrs.meta.platforms ++ [ "aarch64-linux" ];
+        configureFlags = (builtins.filter (flag: flag != "--enable-archs=x86_64,i386") prevAttrs.configureFlags) ++ [ "--enable-archs=aarch64,i386" ];
+        nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [ clang ];
+        patches = prevAttrs.patches ++ [(writeText "winegcc-llvm-with-target.patch" ''
+            diff -ur orig/tools/winegcc/winegcc.c new/tools/winegcc/winegcc.c
+            --- orig/tools/winegcc/winegcc.c
+            +++ new/tools/winegcc/winegcc.c
+            @@ -283,7 +283,8 @@
+             
+                 if ((path = find_binary( opts->prefix, str ))) return strarray_fromstring( path, " " );
+             
+            -    if (!opts->version) str = xstrdup( llvm_base );
+            +    if (target) str = strmake( "%s-%s", target, llvm_base);
+            +    else if (!opts->version) str = xstrdup( llvm_base );
+                 else str = strmake( "%s-%s", llvm_base, opts->version );
+                 path = find_binary( opts->prefix, str );
+                 if (!path)
+        '')];
     });
 }
