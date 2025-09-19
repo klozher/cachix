@@ -18,9 +18,10 @@ jobs:
       with:
         name: klozher
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        useDaemon: false
     - run: |
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
           nix flake lock --override-input nixpkgs github:NixOS/nixpkgs/${{ github.event.inputs.commit }}
         fi
-        nix flake show --json | jq  '.packages."aarch64-linux"|keys[]'| xargs -I {} nix build -L .#{}
+        nix flake show --json | jq  '.packages."aarch64-linux"|keys[]' | xargs -I {} nix build -L .#{}
 
