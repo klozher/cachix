@@ -1,4 +1,6 @@
 {
+    lib,
+    pkgsCross,
     fetchurl,
     fetchFromGitHub,
     stdenv,
@@ -7,9 +9,12 @@
     writeText,
     writeShellApplication,
 
+    cmake,
     meson,
     ninja,
     pkg-config,
+    python3,
+    nasm,
 
     linuxPackages_custom,
     coreutils,
@@ -18,6 +23,9 @@
     gawk,
     jq,
     glib,
+    xxHash,
+    git,
+    glibc,
 
     linuxHeaders,
     bluez,
@@ -27,6 +35,9 @@
     protobuf,
     protobufc,
     iio-sensor-proxy,
+    wineWow64Packages,
+    llvmPackages_21,
+    fex-headless,
     ...
 }@args: rec {
     void-pipa = fetchFromGitHub {
@@ -190,4 +201,196 @@
             cp ${void-pipa}/packages/pipa-sensors/files/81-libssc-xiaomi-pipa.rules $out/lib/udev/rules.d/
         '';
     });
+        arm64ec-w64-mingw32-system = (lib.systems.elaborate lib.systems.examples.ucrtAarch64) // {
+            config = "arm64ec-w64-mingw32";
+            system = "arm64ec-windows";
+        };
+
+        aarch64-w64-mingw32-pkgs = pkgsCross.ucrtAarch64;
+        aarch64-w64-mingw32-build = aarch64-w64-mingw32-pkgs.buildPackages;
+
+        arm64ec-w64-mingw32-stdenv = aarch64-w64-mingw32-pkgs.stdenv.override {
+            hostPlatform = arm64ec-w64-mingw32-system;
+            targetPlatform = arm64ec-w64-mingw32-system;
+        };
+        arm64ec-w64-mingw32-stdenvNoCC = aarch64-w64-mingw32-pkgs.stdenvNoCC.override {
+            hostPlatform = arm64ec-w64-mingw32-system;
+            targetPlatform = arm64ec-w64-mingw32-system;
+        };
+        arm64ec-w64-mingw32-callPackage = aarch64-w64-mingw32-pkgs.newScope arm64ec-w64-mingw32-override;
+        arm64ec-w64-mingw32-override = {
+            stdenv = arm64ec-w64-mingw32-stdenv;
+            stdenvNoCC = arm64ec-w64-mingw32-stdenvNoCC;
+            callPackage = arm64ec-w64-mingw32-callPackage;
+        };
+
+        arm64ec-w64-mingw32-build-stdenv = aarch64-w64-mingw32-build.stdenv.override {
+            targetPlatform = arm64ec-w64-mingw32-system;
+        };
+        arm64ec-w64-mingw32-build-stdenvNoCC = aarch64-w64-mingw32-build.stdenvNoCC.override {
+            targetPlatform = arm64ec-w64-mingw32-system;
+        };
+        arm64ec-w64-mingw32-build-callPackage = aarch64-w64-mingw32-build.newScope arm64ec-w64-mingw32-build-override;
+        arm64ec-w64-mingw32-build-override = {
+            stdenv = arm64ec-w64-mingw32-build-stdenv;
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            callPackage = arm64ec-w64-mingw32-build-callPackage;
+        };
+
+        arm64ec-w64-mingw32-build-llvm_21 = aarch64-w64-mingw32-build.llvmPackages_21.override ({
+            targetLlvmLibraries = aarch64-w64-mingw32-build.targetPackages.llvmPackages_21.libraries // {
+                compiler-rt-no-libc = arm64ec-w64-mingw32-compiler-rt-no-libc;
+                compiler-rt = arm64ec-w64-mingw32-compiler-rt-libc;
+                libcxx = arm64ec-w64-mingw32-libcxx;
+                libunwind = arm64ec-w64-mingw32-libunwind;
+            };
+        } // arm64ec-w64-mingw32-build-override);
+        arm64ec-w64-mingw32-build-bintoolsNoLibc = arm64ec-w64-mingw32-build-llvm_21.bintoolsNoLibc.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+        };
+        arm64ec-w64-mingw32-build-clangNoCompilerRt = arm64ec-w64-mingw32-build-llvm_21.clangNoCompilerRt.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            bintools = arm64ec-w64-mingw32-build-bintoolsNoLibc;
+        };
+        arm64ec-w64-mingw32-compiler-rt-no-libc = (aarch64-w64-mingw32-pkgs.llvmPackages_21.compiler-rt-no-libc.override {
+            stdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenv arm64ec-w64-mingw32-build-clangNoCompilerRt;
+            devExtraCmakeFlags = [(lib.cmakeFeature "CMAKE_SYSTEM_NAME" "Windows")];
+        })
+        .overrideAttrs (prevAttrs: {
+            postInstall = prevAttrs.postInstall + ''
+                arm64ec-w64-mingw32-llvm-lib -machine:arm64ec -out:$out/lib/windows/libclang_rt.builtins-aarch64.a \
+                    $out/lib/windows/libclang_rt.builtins-arm64ec.a \
+                    ${aarch64-w64-mingw32-pkgs.llvmPackages_21.compiler-rt-no-libc}/lib/windows/libclang_rt.builtins-aarch64.a
+                rm $out/lib/windows/libclang_rt.builtins-arm64ec.a;
+                ln -s $out/lib/windows/libclang_rt.builtins-aarch64.a $out/lib/windows/libclang_rt.builtins-arm64ec.a
+            '';
+        });
+        arm64ec-w64-mingw32-build-clangNoLibc = arm64ec-w64-mingw32-build-llvm_21.clangNoLibc.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            bintools = arm64ec-w64-mingw32-build-bintoolsNoLibc;
+        };
+        arm64ec-w64-mingw32-build-clangNoLibcStdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenvNoCC arm64ec-w64-mingw32-build-clangNoLibc;
+        arm64ec-w64-mingw32-windows = aarch64-w64-mingw32-pkgs.windows.overrideScope (final: prev: {
+            mingw_w64 = (prev.mingw_w64.override {
+                stdenv = arm64ec-w64-mingw32-build-clangNoLibcStdenv;
+            });
+            mingw_w64_headers = (prev.mingw_w64_headers.override {
+                stdenvNoCC = arm64ec-w64-mingw32-stdenvNoCC;
+            });
+            pthreads = (prev.pthreads.override {
+                stdenv = arm64ec-w64-mingw32-build-clangNoLibcStdenv;
+            }).overrideAttrs (prevAttrs: {
+                RCFLAGS = "-I${final.mingw_w64_headers}/include";
+            });
+        });
+        arm64ec-w64-mingw32-windows-pthreads = arm64ec-w64-mingw32-windows.pthreads;
+        arm64ec-w64-mingw32-windows-mingw_w64 = arm64ec-w64-mingw32-windows.mingw_w64;
+        arm64ec-w64-mingw32-build-bintools = arm64ec-w64-mingw32-build-llvm_21.bintools.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            libc = arm64ec-w64-mingw32-windows.mingw_w64;
+        };
+        arm64ec-w64-mingw32-compiler-rt-no-libc-combined = aarch64-w64-mingw32-build.runCommand "compiler-rt" {} ''
+            ${arm64ec-w64-mingw32-build-llvm_21.bintools-unwrapped.out}/bin/arm64ec-w64-mingw32-llvm-lib -machine:arm64ec \
+                -out:$out/lib/windows/libclang_rt.builtins-aarch64.a \
+                ${arm64ec-w64-mingw32-compiler-rt-no-libc.out}/lib/windows/libclang_rt.builtins-arm64ec.a \
+                ${aarch64-w64-mingw32-pkgs.llvmPackages_21.compiler-rt-no-libc.out}/lib/windows/libclang_rt.builtins-aarch64.a
+        '';
+        arm64ec-w64-mingw32-build-clangNoLibcxx = arm64ec-w64-mingw32-build-llvm_21.clangNoLibcxx.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            bintools = arm64ec-w64-mingw32-build-bintools;
+            libc = arm64ec-w64-mingw32-build-bintools.libc;
+        };
+        arm64ec-w64-mingw32-libunwind = (aarch64-w64-mingw32-pkgs.llvmPackages_21.libunwind.override {
+            stdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenv arm64ec-w64-mingw32-build-clangNoLibcxx;
+        }).overrideAttrs (prev: {
+            cmakeFlags = prev.cmakeFlags ++ [ "-DCMAKE_SYSTEM_PROCESSOR=arm64ec" ];
+        });
+        arm64ec-w64-mingw32-libcxx = aarch64-w64-mingw32-pkgs.llvmPackages_21.libcxx.override ({
+            stdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenv arm64ec-w64-mingw32-build-clangNoLibcxx;
+            libunwind = arm64ec-w64-mingw32-libunwind;
+        });
+        arm64ec-w64-mingw32-build-clangWithLibcAndBasicRtAndLibcxx = arm64ec-w64-mingw32-build-llvm_21.clangWithLibcAndBasicRtAndLibcxx.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            bintools = arm64ec-w64-mingw32-build-bintools;
+            libc = arm64ec-w64-mingw32-build-bintools.libc;
+        };
+        arm64ec-w64-mingw32-compiler-rt-libc = (aarch64-w64-mingw32-pkgs.llvmPackages_21.compiler-rt-libc.override {
+            stdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenv arm64ec-w64-mingw32-build-clangWithLibcAndBasicRtAndLibcxx;
+        })
+        .overrideAttrs (prevAttrs: {
+            postInstall = prevAttrs.postInstall + ''
+                arm64ec-w64-mingw32-llvm-lib -machine:arm64ec -out:$out/lib/windows/libclang_rt.builtins-aarch64.a \
+                    $out/lib/windows/libclang_rt.builtins-arm64ec.a \
+                    ${aarch64-w64-mingw32-pkgs.llvmPackages_21.compiler-rt-libc}/lib/windows/libclang_rt.builtins-aarch64.a
+                rm $out/lib/windows/libclang_rt.builtins-arm64ec.a;
+                ln -s $out/lib/windows/libclang_rt.builtins-aarch64.a $out/lib/windows/libclang_rt.builtins-arm64ec.a
+            '';
+        });
+        arm64ec-w64-mingw32-build-clangUseLLVM = arm64ec-w64-mingw32-build-llvm_21.clangUseLLVM.override {
+            stdenvNoCC = arm64ec-w64-mingw32-build-stdenvNoCC;
+            bintools = arm64ec-w64-mingw32-build-bintools;
+            libc = arm64ec-w64-mingw32-build-bintools.libc;
+        };
+        arm64ec-w64-mingw32-build-clangStdenv = aarch64-w64-mingw32-build.overrideCC arm64ec-w64-mingw32-stdenvNoCC arm64ec-w64-mingw32-build-clangUseLLVM;
+        arm64ec-w64-mingw32-fex-lib = arm64ec-w64-mingw32-build-clangStdenv.mkDerivation (finalAttrs: {
+            pname = "fex";
+            version = "2509.1";
+            src = fetchFromGitHub {
+                owner = "FEX-Emu";
+                repo = "FEX";
+                tag = "FEX-${finalAttrs.version}";
+                hash = "sha256-Mlch6MbrQmOgo+q1OIyflTYlrbH7qGqFbcI/8v2c+aQ=";
+                leaveDotGit = true;
+                postFetch = ''
+                  cd $out
+                  git reset
+                  # Only fetch required submodules
+                  git submodule update --init --depth 1
+                  find . -name .git -print0 | xargs -0 rm -rf
+                '';
+              };
+
+            nativeBuildInputs = [
+                git
+                nasm
+                cmake
+                ninja
+                pkg-config
+                (python3.withPackages ( pythonPackages:
+                   with pythonPackages; [ setuptools ]
+                ))
+            ];
+            buildInputs = [ arm64ec-w64-mingw32-windows.pthreads ];
+            cmakeFlags = [
+                (lib.cmakeFeature "MINGW_TRIPLE" "arm64ec-w64-mingw32")
+                (lib.cmakeFeature "CMAKE_TOOLCHAIN_FILE" "Data/CMake/toolchain_mingw.cmake")
+                (lib.cmakeBool "ENABLE_LTO" false)
+                (lib.cmakeBool "BUILD_TESTS" false)
+                (lib.cmakeBool "ENABLE_JEMALLOC_GLIBC_ALLOC" false)
+            ];
+        });
+        arm64ec-w64-mingw32-dxvk = aarch64-w64-mingw32-pkgs.dxvk_2.override {
+            stdenv = arm64ec-w64-mingw32-build-clangStdenv;
+            windows = arm64ec-w64-mingw32-windows;
+        };
+        wine_overrideAttrs = prevAttrs: {
+            src = fetchFromGitHub {
+                owner = "AndreRH";
+                repo = "wine";
+                rev = "8af5bc31eb85ba63dd1434a588828c2d1ae71f3a";
+                hash = "sha256-WcRca096W57fF0GRjGCq+mx9hf+XYqNzUAo1dyC32gU=";
+            };
+            meta.platforms = prevAttrs.meta.platforms ++ [ "aarch64-linux" ];
+            configureFlags = (builtins.filter (flag: flag != "--enable-archs=x86_64,i386") prevAttrs.configureFlags) ++ [ "--enable-archs=arm64ec,aarch64 --with-mingw=clang" ];
+            nativeBuildInputs = prevAttrs.nativeBuildInputs ++ [
+                arm64ec-w64-mingw32-build-clangUseLLVM
+                aarch64-w64-mingw32-build.llvmPackages_21.clang
+                llvmPackages_21.bintools
+            ];
+            postInstall = prevAttrs.postInstall + ''
+                cp ${arm64ec-w64-mingw32-fex-lib}/lib/libarm64ecfex.dll $out/lib/wine/aarch64-windows/
+                cp ${arm64ec-w64-mingw32-dxvk}/bin/*.dll $out/lib/wine/aarch64-windows/
+            '';
+        };
+        wine = wineWow64Packages.unstableFull.overrideAttrs wine_overrideAttrs;
 }
