@@ -4,7 +4,11 @@
     };
     outputs = {self, nixpkgs, ...}:
     let
-        pkgs = nixpkgs.legacyPackages.aarch64-linux;
+        pkgs = import nixpkgs {
+            system = "aarch64-linux";
+            config.allowUnfree = true;
+            config.allowUnsupportedSystem = true;
+        };
         custom-pkgs = with pkgs.lib.attrsets; filterAttrs (n: v: isDerivation v) (pkgs.callPackage ./custom-pkgs.nix {});
     in {
         packages.aarch64-linux = custom-pkgs;
