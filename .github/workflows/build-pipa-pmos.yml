@@ -16,6 +16,8 @@ jobs:
         timezone = Asia/Shanghai
         ui = gnome
         EOF
+    - name: pmbootstrap init
+      run: nix run nixpkgs#pmbootstrap init
     - name: create img
       run: nix run nixpkgs#pmbootstrap install -- --password 123456
     - name: tar boot.tar
