@@ -10,4 +10,5 @@ jobs:
       uses: owenthereal/action-upterm@v1
       with:
         limit-access-to-actor: true # Restrict to the user who triggered the workflow
+        wait-timeout-minutes: 5
 

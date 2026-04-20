@@ -1,0 +1,13 @@
+name: Debug on aarch64
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: cachix/install-nix-action@v31
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
+        timeout-minutes: 15
+
