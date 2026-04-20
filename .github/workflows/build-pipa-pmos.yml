@@ -1,0 +1,33 @@
+name: build pmos for pipa
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: cachix/install-nix-action@v31
+    - name: create config
+      run: |
+        cat <<EOF > $XDG_CONFIG_HOME/pmbootstrap_v3.cfg
+        [pmbootstrap]
+        device = xiaomi-pipa
+        is_default_channel = False
+        kernel = csot
+        ssh_keys = True
+        timezone = Asia/Shanghai
+        ui = gnome
+        EOF
+    - name: create img
+      run: nix run nixpkgs#pmbootstrap install -- --password 123456
+    - name: tar boot.tar
+      run: tar cvf boot.tar /home/runner/.local/var/pmbootstrap/chroot_rootfs_xiaomi-pipa/boot
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: boot.tar
+        path: boot.tar
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: rootfs.img
+        path: /home/runner/.local/var/pmbootstrap/chroot_native/home/pmos/rootfs/xiaomi-pipa.img
+
