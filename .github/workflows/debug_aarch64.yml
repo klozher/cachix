@@ -1,7 +1,7 @@
 name: Debug on aarch64
 on: [workflow_dispatch]
 jobs:
-  build:
+  debug:
     runs-on: ubuntu-24.04-arm
     steps:
     - uses: cachix/install-nix-action@v31

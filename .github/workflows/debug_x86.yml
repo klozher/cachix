@@ -1,7 +1,7 @@
 name: Debug on x86-64
 on: [workflow_dispatch]
 jobs:
-  build:
+  debug:
     runs-on: ubuntu-latest
     steps:
     - uses: cachix/install-nix-action@v31
