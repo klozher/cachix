@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-24.04-arm
     steps:
     - uses: cachix/install-nix-action@v31
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+    - name: Setup upterm session
+      uses: owenthereal/action-upterm@v1
       with:
-        limit-access-to-actor: true
-        timeout-minutes: 15
+        limit-access-to-actor: true # Restrict to the user who triggered the workflow
+        wait-timeout-minutes: 5
 
