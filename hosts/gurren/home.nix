@@ -19,35 +19,6 @@
     ] ++ (with pkgs.kdePackages; [
         yakuake
     ]);
-    home.persistence."/persist" = {
-        directories = [
-            "Desktop"
-            "Downloads"
-            "Documents"
-            "Games"
-            "projects"
-            ".steam"
-            ".local/share/Steam"
-            ".ssh"
-            ".mozilla"
-            ".config/zsh"
-            ".config/fcitx5"
-            ".config/kdeconnect"
-            ".config/heroic"
-            ".config/mpv"
-            ".config/jellyfin-mpv-shim"
-            ".config/openrazer"
-            ".local/share/io.github.clash-verge-rev.clash-verge-rev"
-            ".local/share/Anki2"
-            ".local/share/umu"
-            ".local/state/wireplumber"
-        ];
-        files = [
-            ".config/yakuakerc"
-            ".config/kwinoutputconfig.json"
-            ".local/share/user-places.xbel"
-        ];
-    };
     home.sessionVariables = {
         QT_IM_MODULE="fcitx";
         MOZ_DISABLE_RDD_SANDBOX = "1";

@@ -103,7 +103,7 @@ in {
           initrd="$(jq -r '."org.nixos.bootspec.v1"."initrd"' "$bootspec")"
           params="$(jq -r '."org.nixos.bootspec.v1"."kernelParams" | join(" ")' "$bootspec")"
           init="$(jq -r '."org.nixos.bootspec.v1"."init"' "$bootspec")"
-          dtb="$(dirname "$kernel")/dtbs/qcom/sm8250-xiaomi-pipa.dtb"
+          dtb="$(dirname "$kernel")/dtbs/qcom/sm8250-xiaomi-pipa-csot.dtb"
 
           echo "Building android boot ..."
 
@@ -151,5 +151,26 @@ in {
             install -Dm644 "$device_xiaomi_pipa/HiFi.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
             ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
         '';
+    };
+    bootmac = stdenvNoCC.mkDerivation rec {
+        pname = "bootmac";
+        version = "0.7.1";
+        src = fetchFromGitLab {
+          domain = "gitlab.postmarketos.org";
+          owner = "postmarketOS";
+          repo = "bootmac";
+          rev = "v${version}";
+          hash = "sha256-GWvZUC8LKPpOWt1oCr93JHg5+W+0CCiYT63VhpSH1ko=";
+        };
+        nativeBuildInputs = [
+          meson
+          ninja
+        ];
+        mesonFlags = [ "-Dsystemd_units=true" ];
+        postInstall = ''
+          substituteInPlace $out/lib/systemd/system/bootmac@.service \
+            --replace-fail "/usr/bin" "$out/bin"
+          '';
+
     };
 }

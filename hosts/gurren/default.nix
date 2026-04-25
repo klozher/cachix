@@ -1,6 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 {
-    networking.hostName = "gurren";
+    imports = [ ./hardware.nix ];
+    klozher.agenix.enable = true;
+    klozher.desktop.enable = true;
+    klozher.desktop.desktop = "plasma";
+    klozher.neovim.enable = true;
+    klozher.home-manager.enable = true;
+    klozher.home-manager.users.sice = import ./home.nix;
+
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     boot.kernelModules = ["ntsync"];
     services.displayManager = {
@@ -11,11 +18,6 @@
     programs = {
         git = {
             enable = true;
-            #            config = {
-            #                "https://gh-proxy.com/github.com/".insteadOf = [
-            #                    "https://github.com"
-            #                ];
-            #};
         };
         steam = {
             enable = true;
@@ -70,16 +72,6 @@
         #vulkan-hdr-layer-kwin6
         #android-tools
     ];
-    i18n.extraLocales = [
-        "zh_CN.UTF-8/UTF-8"
-        "zh_CN.GB18030/GB18030"
-        "zh_CN.GBK/GBK"
-        "ja_JP.UTF-8/UTF-8"
-        "ja_JP.EUC-JP/EUC-JP"
-    ];
-    #programs.cdemu.enable = true;
-    home-manager.useGlobalPkgs = true;
-    home-manager.sharedModules = [ inputs.plasma-manager.homeModules.plasma-manager ];
-    home-manager.users.sice = import ./home.nix;
+    programs.cdemu.enable = true;
 }
 

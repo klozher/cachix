@@ -32,7 +32,6 @@
         isNormalUser = true;
         extraGroups = [ "wheel" "samba" "libvirtd" "cdrom"];
         shell = pkgs.zsh;
-        hashedPasswordFile = config.age.secrets.passwd.path;
         openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPr8P8HoWx5U16EvZZ6QdlxnnZ0QYBg1UFO8wr9pwTs sice@gurren"
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0bzqib802Y+PQ0ss0irr4dFE/Plpns8pMhKnfgAK04 sice@t50"
@@ -65,6 +64,5 @@
         lsof
         atop
     ];
-    home-manager.useGlobalPkgs = true;
 }
 

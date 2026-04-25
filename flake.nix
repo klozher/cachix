@@ -10,40 +10,28 @@
     nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
   };
 
-  outputs = { self, nixpkgs, agenix, impermanence, home-manager, nixvim, nixpkgs-xr, ... }@inputs:
+  outputs = { self, nixpkgs, ... }@inputs:
   let
-    nixosFor = host: config: nixpkgs.lib.nixosSystem {
-      system = config.system;
+    nixosFor = host: system: nixpkgs.lib.nixosSystem {
+      system = system;
       specialArgs = { inherit inputs; };
       modules = [
-        agenix.nixosModules.age modules/agenix.nix
-        nixvim.nixosModules.nixvim modules/nixvim.nix
-        impermanence.nixosModules.impermanence modules/persist.nix
-        home-manager.nixosModules.home-manager
-        #nixpkgs-xr.nixosModules.nixpkgs-xr
+        modules/hardware.nix
+        modules/agenix.nix
+        modules/nixvim.nix
+        modules/desktop.nix
+        modules/home-manager.nix
         modules/base.nix
-        hosts/${host}/hardware.nix hosts/${host}/system.nix
-      ] ++ config.modules;
+        hosts/${host}
+        { networking.hostName = host; }
+      ];
     };
   in {
     inherit inputs;
     nixosConfigurations = builtins.mapAttrs nixosFor {
-      gurren = {
-        system = "x86_64-linux";
-        modules = [modules/kde.nix];
-      };
-      giga = {
-        system = "x86_64-linux";
-        modules = [];
-      };
-      pipa = {
-        system = "aarch64-linux";
-        modules = [modules/gnome.nix];
-      };
-      pipa-live = {
-        system = "aarch64-linux";
-        modules = [];
-      };
+      gurren = "x86_64-linux";
+      giga = "x86_64-linux";
+      pipa = "aarch64-linux";
     };
   };
 }
