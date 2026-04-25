@@ -34,6 +34,7 @@ in {
                             ".ssh"
                             ".mozilla"
                             ".config/zsh"
+                            ".config/git"
                             ".config/fcitx5"
                             ".config/kdeconnect"
                             ".config/heroic"
