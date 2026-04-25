@@ -10,4 +10,9 @@ jobs:
       with:
         limit-access-to-actor: true # Restrict to the user who triggered the workflow
         wait-timeout-minutes: 5
-
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v7
+      with:
+        name: outputs
+        path: /home/runner/outputs
+        if-no-files-found: ignore
