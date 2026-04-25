@@ -41,6 +41,8 @@ in {
                             ".config/mpv"
                             ".config/jellyfin-mpv-shim"
                             ".config/openrazer"
+                            ".vscode"
+                            ".config/Code"
                             ".local/share/io.github.clash-verge-rev.clash-verge-rev"
                             ".local/share/Anki2"
                             ".local/share/umu"
