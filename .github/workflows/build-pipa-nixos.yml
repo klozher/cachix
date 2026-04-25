@@ -10,7 +10,7 @@ jobs:
       with:
         name: klozher
         authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
-    - run: nix run nixpkgs#nixos-rebuild -- build-image --image-variant raw --flake .#pipa-live
+    - run: nix build .#nixosConfigurations.pipa.config.system.build.toplevel
     - name: Setup upterm session
       uses: owenthereal/action-upterm@v1
       if: ${{ failure() }}
