@@ -1,5 +1,10 @@
 name: build nixos for pipa
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.nix'
+      - 'flake.lock'
 jobs:
   build:
     runs-on: ubuntu-24.04-arm
