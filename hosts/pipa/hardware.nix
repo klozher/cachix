@@ -100,12 +100,6 @@ let
             --replace-fail "/usr/bin" "$out/bin"
           substituteInPlace $out/lib/udev/rules.d/90-bootmac-bluetooth.rules \
             --replace-fail "/usr/bin" "$out/bin"
-          substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
-              --replace-fail "/usr/bin" "$out/bin"
-          substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
-            --replace-fail "@wlan" "wlan-if=wlp1s0"
-          substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
-            --replace-fail "wlan0" "wlp1s0"
           wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk ])}
         '';
     };
