@@ -16,12 +16,14 @@ in {
         home-manager.users = cfg.users;
         home-manager.useGlobalPkgs = true;
         home-manager.extraSpecialArgs = { osConfig = config; };
-        home-manager.sharedModules = [ inputs.plasma-manager.homeModules.plasma-manager ] ++
-        [({config, lib, pkgs, osConfig, ...}: 
-            let
-                tmpfs-on-root = osConfig.klozher.tmpfs-on-root.enable;
-            in {
-                config = lib.mkIf tmpfs-on-root {
+        home-manager.sharedModules = ([ inputs.plasma-manager.homeModules.plasma-manager ]
+          ++[({config, ...}: {
+                programs.zsh = {
+                    enable = true;
+                    dotDir = "${config.xdg.configHome}/zsh";
+                };
+            })]
+          ++(lib.lists.optional config.klozher.tmpfs-on-root.enable ({...}: {
                     home.persistence."/persist" = {
                         directories = [
                             "Desktop"
@@ -47,6 +49,7 @@ in {
                             ".local/share/Anki2"
                             ".local/share/umu"
                             ".local/state/wireplumber"
+                            ".config/dconf"
                         ];
                         files = [
                             ".config/yakuakerc"
@@ -54,10 +57,14 @@ in {
                             ".local/share/user-places.xbel"
                             ".config/gnome-initial-setup-done"
                         ];
-                    };
                 };
-            }
-        )];
+                }))
+           ++  (lib.lists.optional config.klozher.desktop.enable ({...}: {
+                    programs.mangohud = {
+                        enable = true;
+                        settings = {};
+                    };
+            })));
     };
 }
 

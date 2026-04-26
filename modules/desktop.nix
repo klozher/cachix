@@ -57,6 +57,7 @@ in {
             programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
             environment.systemPackages = with pkgs; [
                 dconf-editor
+                dconf2nix
             ];
             i18n.inputMethod = {
                 enable = true;

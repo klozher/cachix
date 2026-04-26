@@ -112,10 +112,6 @@
             '';
         };
     };
-    programs.zsh = {
-        enable = true;
-        dotDir = "${config.xdg.configHome}/zsh";
-    };
     programs.firefox = {
         enable = true;
         profiles.test = {

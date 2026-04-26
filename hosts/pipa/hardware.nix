@@ -190,7 +190,7 @@ in
         };
     };
 
-    #swapDevices = [{ device = "/dev/disk/by-partlabel/super"; }];
+    swapDevices = [{ device = "/dev/disk/by-partlabel/super"; }];
     klozher.tmpfs-on-root = {
         enable = true;
         persistDev = {
