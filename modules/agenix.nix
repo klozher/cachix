@@ -7,7 +7,7 @@ in {
         enable = lib.mkEnableOption "Enable agenix";
     };
     config = lib.mkIf cfg.enable {
-        environment.systemPackages = [ inputs.agenix.packages."${pkgs.system}".agenix ];
+        environment.systemPackages = [ inputs.agenix.packages."${pkgs.stdenv.hostPlatform.system}".agenix ];
         age.identityPaths = [
             "/persist/etc/ssh/ssh_host_rsa_key"
             "/persist/etc/ssh/ssh_host_ed25519_key"
