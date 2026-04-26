@@ -55,23 +55,9 @@ in {
                 };
             };
             programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
-            programs.dconf.enable = true;
-            environment.gnome.excludePackages = with pkgs; [
-                epiphany #browser
-                gnome-contacts
-                gnome-weather
-                simple-scan #scanner
-                geary #mail
-            ];
             environment.systemPackages = with pkgs; [
                 dconf-editor
-            ] ++ (with pkgs.gnomeExtensions; [
-                caffeine
-                screen-rotate
-                app-grid-wizard
-                forge
-                battery-health-charging
-            ]);
+            ];
             i18n.inputMethod = {
                 enable = true;
                 type = "ibus";

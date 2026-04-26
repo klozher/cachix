@@ -52,6 +52,7 @@ in {
                             ".config/yakuakerc"
                             ".config/kwinoutputconfig.json"
                             ".local/share/user-places.xbel"
+                            ".config/gnome-initial-setup-done"
                         ];
                     };
                 };
@@ -59,3 +60,4 @@ in {
         )];
     };
 }
+
