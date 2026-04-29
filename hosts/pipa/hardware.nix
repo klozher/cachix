@@ -25,6 +25,40 @@ let
             mv "$out/lib/firmware/sm8250" "$out/lib/firmware/qcom/"
         '';
     };
+    pipa-device = pkgs.symlinkJoin {
+        name = "pipa-device";
+        paths = [ pkgs.alsa-ucm-conf ];
+        postBuild = ''
+            device_xiaomi_pipa="${pmports}/device/testing/device-xiaomi-pipa"
+            install -Dm644 "$device_xiaomi_pipa/81-libssc-xiaomi-pipa.rules" -t "$out/lib/udev/rules.d/"
+            install -Dm644 "$device_xiaomi_pipa/hexagonrpcd-sdsp.conf" -t "$out/share/hexagonrpcd/"
+            install -Dm644 "$device_xiaomi_pipa/pipa.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
+            install -Dm644 "$device_xiaomi_pipa/HiFi.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
+            ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
+        '';
+    };
+    bootmac = pkgs.stdenv.mkDerivation rec {
+        pname = "bootmac";
+        version = "0.7.1";
+        src = pkgs.fetchFromGitLab {
+          domain = "gitlab.postmarketos.org";
+          owner = "postmarketOS";
+          repo = "bootmac";
+          rev = "v${version}";
+          hash = "sha256-GWvZUC8LKPpOWt1oCr93JHg5+W+0CCiYT63VhpSH1ko=";
+        };
+        nativeBuildInputs = with pkgs; [ meson ninja makeWrapper ];
+        mesonFlags = [ "-Dsystemd_units=true" ];
+        postInstall = ''
+          substituteInPlace $out/lib/systemd/system/bootmac@.service \
+            --replace-fail "/usr/bin" "$out/bin"
+          substituteInPlace $out/lib/udev/rules.d/90-bootmac-bluetooth.rules \
+            --replace-fail "/usr/bin" "$out/bin"
+          substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
+            --replace-fail "/usr/bin" "$out/bin"
+          wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk ])}
+        '';
+    };
     pipa-boot = pkgs.writeShellApplication {
         name = "pipa-boot";
         runtimeInputs = with pkgs; [ coreutils jq android-tools qbootctl gzip gawk ];
@@ -84,40 +118,6 @@ let
           dd if="$boot_img" of="$CURR_SLOT_PATH"
 
           rm "$kernel_gz" "$kernel_gz_dtb" "$boot_img"
-        '';
-    };
-    pipa-device = pkgs.symlinkJoin {
-        name = "pipa-device";
-        paths = [ pkgs.alsa-ucm-conf ];
-        postBuild = ''
-            device_xiaomi_pipa="${pmports}/device/testing/device-xiaomi-pipa"
-            install -Dm644 "$device_xiaomi_pipa/81-libssc-xiaomi-pipa.rules" -t "$out/lib/udev/rules.d/"
-            install -Dm644 "$device_xiaomi_pipa/hexagonrpcd-sdsp.conf" -t "$out/share/hexagonrpcd/"
-            install -Dm644 "$device_xiaomi_pipa/pipa.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
-            install -Dm644 "$device_xiaomi_pipa/HiFi.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
-            ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
-        '';
-    };
-    bootmac = pkgs.stdenv.mkDerivation rec {
-        pname = "bootmac";
-        version = "0.7.1";
-        src = pkgs.fetchFromGitLab {
-          domain = "gitlab.postmarketos.org";
-          owner = "postmarketOS";
-          repo = "bootmac";
-          rev = "v${version}";
-          hash = "sha256-GWvZUC8LKPpOWt1oCr93JHg5+W+0CCiYT63VhpSH1ko=";
-        };
-        nativeBuildInputs = with pkgs; [ meson ninja makeWrapper ];
-        mesonFlags = [ "-Dsystemd_units=true" ];
-        postInstall = ''
-          substituteInPlace $out/lib/systemd/system/bootmac@.service \
-            --replace-fail "/usr/bin" "$out/bin"
-          substituteInPlace $out/lib/udev/rules.d/90-bootmac-bluetooth.rules \
-            --replace-fail "/usr/bin" "$out/bin"
-          substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
-            --replace-fail "/usr/bin" "$out/bin"
-          wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk ])}
         '';
     };
 in
