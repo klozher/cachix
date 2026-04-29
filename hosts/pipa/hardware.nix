@@ -210,6 +210,10 @@ in
         pulseaudio.enable = true;
         logind.settings.Login.HandlePowerKey = "lock";
         udev.packages = [ pipa-device bootmac ];
+        udev.extraRules = ''
+            SUBSYSTEM=="misc", KERNEL=="fastrpc-adsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
+            SUBSYSTEM=="misc", KERNEL=="fastrpc-sdsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
+        '';
     };
     systemd.services = {
         qbootctl = {
@@ -218,6 +222,18 @@ in
             serviceConfig = {
                 Type = "oneshot";
                 ExecStart = "${pkgs.qbootctl}/bin/qbootctl -m";
+            };
+        };
+        hexagonrpc-sdsp = {
+            description = "Hexagonrpcd SDSP Daemon to support Qualcomm Hexagon SDSP virtual filesystem";
+            requires = ["dev-fastrpc\\x2dsdsp.device"];
+            after = ["dev-fastrpc\\x2dsdsp.device"];
+            requiredBy = ["iio-sensor-proxy.service"];
+            before = ["iio-sensor-proxy.service"];
+            serviceConfig = {
+                ExecStart = with pkgs; ''
+                    ${hexagonrpc}/bin/hexagonrpcd -s -f /dev/fastrpc-sdsp -R ${pipa-firmware}/share/qcom/sm8250/Xiaomi/pipa
+                '';
             };
         };
     };
