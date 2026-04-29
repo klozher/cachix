@@ -60,14 +60,29 @@ let
 
           echo "Boot has been built to $boot_img"
 
-          if [ -e "/dev/disk/by-partlabel/boot_a" ];then
-            echo "Boot partition detected, reflashing..."
-            slot=$(qbootctl -c | awk '{print $3}')
-            echo "Detected boot slot: $slot"
-            device="/dev/disk/by-partlabel/boot$slot"
-            echo "Flashing to $device"
-            dd if="$boot_img" of="$device"
+          CURR_SLOT=$(qbootctl -c | awk '{print $3}')
+          if [[ -z "$CURR_SLOT" ]]; then
+              echo "qbootctl failed"
+              exit 1
           fi
+          BACK_SLOT=$([[ "$CURR_SLOT" == "_a" ]] && echo "_b" || echo "_a")
+          CURR_SLOT_PATH="/dev/disk/by-partlabel/boot$CURR_SLOT"
+          BACK_SLOT_PATH="/dev/disk/by-partlabel/boot$BACK_SLOT"
+
+          if [[ ! -e "$CURR_SLOT_PATH" || ! -e "$BACK_SLOT_PATH" ]]; then
+              echo "no boot parts"
+              exit 1
+          fi
+
+          if [[ ! -e /run/pipa-booted-part-already-backed-up ]]; then
+              echo "Backing up from $CURR_SLOT_PATH to $BACK_SLOT_PATH"
+              dd if="$CURR_SLOT_PATH" of="$BACK_SLOT_PATH"
+              touch /run/pipa-booted-part-already-backed-up
+          fi
+
+          echo "Flashing to $CURR_SLOT_PATH"
+          dd if="$boot_img" of="$CURR_SLOT_PATH"
+
           rm "$kernel_gz" "$kernel_gz_dtb" "$boot_img"
         '';
     };
@@ -278,9 +293,10 @@ in
         '';
     };
     systemd.services = {
-        qbootctl = {
+        qbootctl-mark-successful = {
             description = "Mark a successful boot";
-            wantedBy = ["sysinit.target"];
+            after = ["graphical.target"];
+            wantedBy = ["graphical.target"];
             serviceConfig = {
                 Type = "oneshot";
                 ExecStart = "${pkgs.qbootctl}/bin/qbootctl -m";
