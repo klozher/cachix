@@ -285,7 +285,6 @@ in
     services = {
         pipewire.enable = false;
         pulseaudio.enable = true;
-        logind.settings.Login.HandlePowerKey = "lock";
         udev.packages = [ pipa-device bootmac ];
         udev.extraRules = ''
             SUBSYSTEM=="misc", KERNEL=="fastrpc-adsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
