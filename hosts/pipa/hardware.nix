@@ -4,8 +4,8 @@ let
         domain = "gitlab.postmarketos.org";
         owner = "postmarketOS";
         repo = "pmaports";
-        rev = "a184bf63e21ec6b51598125810be7eefb73e6261";
-        hash = "sha256-sDk9eHDtmDYJ83IRz3KqXDOW/H0E4zAzhPU5fuujmKo=";
+        rev = "632197dd74360977197e249149ded06e68f4a01a";
+        hash = "sha256-dhCxdMaKwqQO57hFcgnNGZ5xNceR3RaXITjl04yxrJ8=";
     };
     pipa-firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "pipa-firmware";
@@ -123,16 +123,8 @@ let
 in
 {
     boot = {
-        kernelPackages = pkgs.linuxPackages_6_19;
+        kernelPackages = pkgs.linuxPackages_7_0;
         kernelPatches = [{
-            patch = null;
-            structuredExtraConfig = {
-                ARM64_ERRATUM_1286807 = lib.kernel.yes;
-                ARM64_ERRATUM_1542419 = lib.kernel.yes;
-                ARM64_ERRATUM_2441007 = lib.kernel.yes;
-                ARM64_ERRATUM_2441009 = lib.kernel.yes;
-            };
-        } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0001-arm64-dts-qcom-sm8250-xiaomi-pipa-Add-device-tree-fo.patch";
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0002-power-supply-Add-driver-for-Qualcomm-PMIC-fuel-gauge.patch";
@@ -147,24 +139,26 @@ in
                 SPI_MT65XX = lib.kernel.no;
             };
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0004-drm-Add-drm-notifier-support.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0004-drm-msm-dsi-change-sync-mode-to-sync-on-DSI0-rather-.patch";
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0005-drm-dsi-emit-panel-turn-on-off-signal-to-touchscreen.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0005-drm-msm-dsi-support-DSC-configurations-with-slice_pe.patch";
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0006-drm-msm-dsi-change-sync-mode-to-sync-on-DSI0-rather-.patch";
-        } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0007-drm-msm-dsi-support-DSC-configurations-with-slice_pe.patch";
-        } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0008-drm-panel-Add-support-for-Novatek-NT36532-panel.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0006-drm-panel-Add-support-for-Novatek-NT36532-panel.patch";
             structuredExtraConfig = {
                 DRM_PANEL_NOVATEK_NT36532 = lib.kernel.module;
             };
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0009-drivers-media-i2c-ov13b10-add-device-tree-support-an.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0007-drivers-media-i2c-ov13b10-add-device-tree-support-an.patch";
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0010-ASoC-codecs-aw88261-add-hacks-for-xiaomi-pipa.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0008-ASoC-qcom-sm8250-add-tertiary-tdm-support.patch";
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0011-ASoC-qcom-sm8250-Add-tdm-support.patch";
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0009-UPSTREAM-ASoC-codecs-aw88261-backport-linux-next-cha.patch";
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0010-HACK-ASoC-codecs-aw88261-add-xiaomi-pipa-hacks.patch";
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0011-FROMLIST-ASoC-qcom-qdsp6-q6afe-fix-clk-vote-response.patch";
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0012-HACK-ASoC-qcom-qdsp6-q6afe-pretend-the-AFE-vote-didn.patch";
         }];
         kernelParams = [
             "resume=/dev/disk/by-partlabel/super"
