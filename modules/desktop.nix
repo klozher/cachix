@@ -10,6 +10,10 @@ in {
     };
     config = lib.mkIf cfg.enable (lib.mkMerge [
         {
+            services.displayManager = {
+                autoLogin.enable = true;
+                autoLogin.user = "sice";
+            };
             fonts.enableDefaultPackages = false;
             fonts.packages = with pkgs; [ sarasa-gothic ];
             programs.kdeconnect.enable = true;

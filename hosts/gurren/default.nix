@@ -10,15 +10,8 @@
 
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     boot.kernelModules = ["ntsync"];
-    services.displayManager = {
-        autoLogin.enable = true;
-        autoLogin.user = "sice";
-    };
     virtualisation.libvirtd.enable = true;
     programs = {
-        git = {
-            enable = true;
-        };
         steam = {
             enable = true;
             extraPackages = with pkgs; [ gamescope mangohud ];

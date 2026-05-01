@@ -41,6 +41,9 @@
 
     programs = {
         nix-ld.enable = true;
+        git = {
+            enable = true;
+        };
         zsh = {
             enable = true;
             histSize = 10000;
@@ -63,6 +66,8 @@
         unar
         lsof
         atop
+        android-tools
+        binutils
     ];
 }
 
