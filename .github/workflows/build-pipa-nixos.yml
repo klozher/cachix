@@ -6,6 +6,20 @@ on:
       - '**.nix'
       - 'flake.lock'
 jobs:
+  push-inputs:
+    runs-on: ubuntu-24.04-arm
+    steps:
+    - uses: actions/checkout@v6
+    - uses: cachix/install-nix-action@v31
+    - uses: cachix/cachix-action@v17
+      with:
+        name: klozher
+        authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+        pathsToPush: ""
+    - run: nix flake prefetch-inputs
+    - run: cachix push klozher /nix/store/*-source
+      env:
+        CACHIX_AUTH_TOKEN: "${{ secrets.CACHIX_AUTH_TOKEN }}"
   build:
     runs-on: ubuntu-24.04-arm
     steps:
