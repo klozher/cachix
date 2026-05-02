@@ -30,7 +30,7 @@
         uid = 1000;
         createHome = true;
         isNormalUser = true;
-        extraGroups = [ "wheel" "samba" "libvirtd" "cdrom"];
+        extraGroups = [ "wheel" "samba" "libvirtd" "cdrom" "input" ];
         shell = pkgs.zsh;
         openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPr8P8HoWx5U16EvZZ6QdlxnnZ0QYBg1UFO8wr9pwTs sice@gurren"
