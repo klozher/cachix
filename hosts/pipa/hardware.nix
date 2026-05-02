@@ -56,7 +56,7 @@ let
             --replace-fail "/usr/bin" "$out/bin"
           substituteInPlace $out/lib/udev/rules.d/90-bootmac-wifi.rules \
             --replace-fail "/usr/bin" "$out/bin"
-          wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk ])}
+          wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk iproute2 ])}
         '';
     };
     pipa-boot = pkgs.writeShellApplication {
@@ -285,6 +285,33 @@ in
             SUBSYSTEM=="misc", KERNEL=="fastrpc-sdsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
         '';
     };
+    systemd.network = {
+        enable = true;
+        # avoid renameing of wlan0 for bootmac to work
+        links."10-wlan0".enable = true;
+        links."10-wlan0".matchConfig.OriginalName = "wlan0";
+        # enable dhcp in usb0
+        networks."10-usb0".enable = true;
+        networks."10-usb0".matchConfig.Name = "usb0";
+        networks."10-usb0".address = [ "172.16.42.1/30" ];
+        networks."10-usb0".networkConfig.DHCPServer = true;
+        networks."10-usb0".dhcpServerConfig = {
+            EmitDNS = false;
+            EmitNTP = false;
+            EmitSIP = false;
+            EmitPOP3 = false;
+            EmitSMTP = false;
+            EmitLPR = false;
+            EmitRouter = false;
+            EmitTimezone = false;
+            PersistLeases= false;
+        };
+    };
+    # dhcp server port
+    networking.firewall.allowedUDPPorts = [67];
+    # disable random mac address
+    networking.networkmanager.wifi.scanRandMacAddress = false;
+
     systemd.services = {
         qbootctl-mark-successful = {
             description = "Mark a successful boot";
