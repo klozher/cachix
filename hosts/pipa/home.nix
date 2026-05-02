@@ -27,10 +27,17 @@ in {
         forge
         battery-health-charging
     ]);
+    home.file.".local/share/nautilus/scripts/umu-launcher" = {
+        text = ''
+            #!/bin/sh
+            nix run ~/projects/klozher-umu#umu-launcher $1
+        '';
+        executable = true;
+    };
     home.sessionVariables = {
         RUNTIMEPATH = "umu-steamrt4-arm64";
         PROTONPATH = "proton-cachyos";
-        PROTON_ENABLE_WAYLAND=1;
+        #PROTON_ENABLE_WAYLAND=1;
     };
     dconf = {
         enable = true;
