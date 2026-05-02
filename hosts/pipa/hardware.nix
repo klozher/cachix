@@ -170,6 +170,8 @@ in
                 # bluetooth and camera only work in real rootfs
                 #"hci_uart"
                 #"qcom_camss"
+                #"qcom_q6v5_pas"
+
                 "apr"
                 "bq25980_charger"
                 "camcc_sm8250"
@@ -212,7 +214,6 @@ in
                 "qcom_fg"
                 "qcom_pmic_tcpm"
                 "qcom_pon"
-                "qcom_q6v5_pas"
                 "qcom_refgen_regulator"
                 "qcom_rng"
                 "qcom_spmi_adc5"
