@@ -254,6 +254,10 @@ in
             external.enable = true;
             external.installHook = "${pipa-boot}/bin/pipa-boot";
         };
+        kernelModules = [
+            #for network interface usb0
+            "g_ether"
+        ];
     };
 
     swapDevices = [{ device = "/dev/disk/by-partlabel/super"; }];
