@@ -50,6 +50,8 @@ in {
                             ".local/share/umu"
                             ".local/state/wireplumber"
                             ".config/dconf"
+                            ".config/pulse"
+                            ".local/share/waydroid"
                         ];
                         files = [
                             ".config/yakuakerc"

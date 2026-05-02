@@ -20,6 +20,7 @@
     services.openssh.settings.PasswordAuthentication = false;
 
     services.resolved.enable = true;
+    networking.nftables.enable = true;
 
     time.timeZone = "Asia/Shanghai";
     i18n.defaultLocale = "en_US.UTF-8";
