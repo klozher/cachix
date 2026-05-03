@@ -120,11 +120,28 @@ let
           rm "$kernel_gz" "$kernel_gz_dtb" "$boot_img"
         '';
     };
+    fsa4480-nodev-fix = pkgs.writeText "fsa4480-nodev-fix.patch" ''
+        diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+        index c54e42c..a7a8284 100644
+        --- a/drivers/usb/typec/mux/fsa4480.c
+        +++ b/drivers/usb/typec/mux/fsa4480.c
+        @@ -280,7 +280,7 @@ static int fsa4480_probe(struct i2c_client *client)
+         
+         	ret = regmap_read(fsa->regmap, FSA4480_DEVICE_ID, &val);
+         	if (ret)
+        -		return dev_err_probe(dev, -ENODEV, "FSA4480 not found\n");
+        +		return dev_err_probe(dev, -EPROBE_DEFER, "FSA4480 not found\n");
+         
+         	dev_dbg(dev, "Found FSA4480 v%lu.%lu (Vendor ID = %lu)\n",
+         		FIELD_GET(FSA4480_DEVICE_ID_VERSION_ID, val),
+    '';
 in
 {
     boot = {
         kernelPackages = pkgs.linuxPackages_7_0;
         kernelPatches = [{
+            patch = "${fsa4480-nodev-fix}";
+        } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0001-arm64-dts-qcom-sm8250-xiaomi-pipa-Add-device-tree-fo.patch";
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0002-power-supply-Add-driver-for-Qualcomm-PMIC-fuel-gauge.patch";
