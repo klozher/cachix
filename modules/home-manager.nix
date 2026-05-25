@@ -36,6 +36,7 @@ in {
                             ".ssh"
                             ".mozilla"
                             ".config/zsh"
+                            ".config/mozilla"
                             ".config/git"
                             ".config/fcitx5"
                             ".config/kdeconnect"
