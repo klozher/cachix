@@ -9,5 +9,8 @@
     klozher.home-manager.users.sice = import ./home.nix;
 
     virtualisation.waydroid.enable = true;
+    services.tlp.enable = true;
+    services.tlp.pd.enable = true;
+    services.power-profiles-daemon.enable = false;
 }
 
