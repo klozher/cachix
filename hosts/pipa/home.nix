@@ -13,12 +13,27 @@ let
             done
         '';
     };
+    umu-launcher = pkgs.callPackage ({umu-launcher, steam, buildFHSEnv, pkgs}: (
+      umu-launcher.override {
+        steam = steam.override {
+          buildFHSEnv = buildFHSEnv.override {
+            callPackage = arg1: (arg2: ((pkgs.callPackage arg1 arg2).override {
+              pkgs = pkgs // { glibc_multi = pkgs.glibc; };
+            }));
+          };
+        };
+      }
+    )) {};
 in {
     home.stateVersion = "25.11";
     home.username = "sice";
     home.homeDirectory = "/home/sice";
     home.packages = with pkgs; [
         gamescope
+        waydroid-helper
+        eden
+    ] ++ [
+        umu-launcher
     ] ++ (with pkgs.gnomeExtensions; [
         gjs-osk
         caffeine
