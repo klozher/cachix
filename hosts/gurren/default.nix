@@ -57,14 +57,6 @@
         openFirewall = true;
         usershares.enable = true;
     };
-    environment.variables = {
-        #ENABLE_HDR_WSI = "1";
-        #KWIN_WAYLAND_SUPPORT_XX_PIP_V1 = "1";
-    };
-    environment.systemPackages = with pkgs; [
-        #vulkan-hdr-layer-kwin6
-        #android-tools
-    ];
-    programs.cdemu.enable = true;
+    #programs.cdemu.enable = true;
 }
 

@@ -45,7 +45,7 @@
         bluetooth.enable = true;
         alsa.enablePersistence = true;
         openrazer = {
-            enable = true;
+            #enable = true;
             users = [ "sice" ];
         };
     };
