@@ -59,67 +59,6 @@ let
           wrapProgram $out/bin/bootmac --prefix PATH : ${lib.makeBinPath (with pkgs; [ coreutils gnugrep util-linux gnused bluez gawk iproute2 ])}
         '';
     };
-    pipa-boot = pkgs.writeShellApplication {
-        name = "pipa-boot";
-        runtimeInputs = with pkgs; [ coreutils jq android-tools qbootctl gzip gawk ];
-        text = ''
-          bootspec="$1/boot.json"
-          kernel="$(jq -r '."org.nixos.bootspec.v1"."kernel"' "$bootspec")"
-          initrd="$(jq -r '."org.nixos.bootspec.v1"."initrd"' "$bootspec")"
-          params="$(jq -r '."org.nixos.bootspec.v1"."kernelParams" | join(" ")' "$bootspec")"
-          init="$(jq -r '."org.nixos.bootspec.v1"."init"' "$bootspec")"
-          dtb="$(dirname "$kernel")/dtbs/qcom/sm8250-xiaomi-pipa-csot.dtb"
-
-          echo "Building android boot ..."
-
-          kernel_gz="/tmp/Image.gz"
-          kernel_gz_dtb="/tmp/Image.gz-dtb"
-          boot_img="/tmp/boot.img"
-
-          gzip -ckf "$kernel" > "$kernel_gz"
-          cat "$kernel_gz" "$dtb" > "$kernel_gz_dtb"
-
-          mkbootimg \
-            --header_version 0 \
-            --kernel_offset 0x00008000 \
-            --base 0x00000000 \
-            --ramdisk_offset 0x01000000 \
-            --second_offset 0x00f00000 \
-            --tags_offset 0x00000100 \
-            --pagesize 4096 \
-            --kernel "$kernel_gz_dtb" \
-            --ramdisk "$initrd" \
-            --cmdline "$params init=$init" \
-            -o "$boot_img"
-
-          echo "Boot has been built to $boot_img"
-
-          CURR_SLOT=$(qbootctl -c | awk '{print $3}')
-          if [[ -z "$CURR_SLOT" ]]; then
-              echo "qbootctl failed"
-              exit 1
-          fi
-          BACK_SLOT=$([[ "$CURR_SLOT" == "_a" ]] && echo "_b" || echo "_a")
-          CURR_SLOT_PATH="/dev/disk/by-partlabel/boot$CURR_SLOT"
-          BACK_SLOT_PATH="/dev/disk/by-partlabel/boot$BACK_SLOT"
-
-          if [[ ! -e "$CURR_SLOT_PATH" || ! -e "$BACK_SLOT_PATH" ]]; then
-              echo "no boot parts"
-              exit 1
-          fi
-
-          if [[ ! -e /run/pipa-booted-part-already-backed-up ]]; then
-              echo "Backing up from $CURR_SLOT_PATH to $BACK_SLOT_PATH"
-              dd if="$CURR_SLOT_PATH" of="$BACK_SLOT_PATH"
-              touch /run/pipa-booted-part-already-backed-up
-          fi
-
-          echo "Flashing to $CURR_SLOT_PATH"
-          dd if="$boot_img" of="$CURR_SLOT_PATH"
-
-          rm "$kernel_gz" "$kernel_gz_dtb" "$boot_img"
-        '';
-    };
     fsa4480-nodev-fix = pkgs.writeText "fsa4480-nodev-fix.patch" ''
         diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
         index c54e42c..a7a8284 100644
@@ -268,8 +207,11 @@ in
             ];
         };
         loader = {
-            external.enable = true;
-            external.installHook = "${pipa-boot}/bin/pipa-boot";
+            timeout = 0;
+            # use u-boot and systemd-boot instead of a custom script writing boot img to boot_a
+            # flash u-boot to boot_a, modify gpt to mark cust as efi, mkfs.fat cust, mount cust on /boot
+            # enable systemd-boot, config hardware.deviceTree, enable fwupd to upgrade u-boot
+            systemd-boot.enable = true;
         };
         kernelModules = [
             #for network interface usb0
@@ -286,8 +228,17 @@ in
             options = [ "compress_algorithm=zstd:6" "compress_chksum" "atgc" "gc_merge" "lazytime" ];
         };
     };
+    fileSystems = {
+        "/boot" = {
+            device = "PARTLABEL=cust";
+            fsType = "vfat";
+            options = [ "fmask=0077" "dmask=0077" ];
+        };
+    };
     systemd.packages = [ bootmac ];
     hardware = {
+        deviceTree.enable = true;
+        deviceTree.name = "qcom/sm8250-xiaomi-pipa-csot.dtb";
         firmware = [ pkgs.linux-firmware pipa-firmware ];
         graphics.enable = true;
         bluetooth.enable = true;
@@ -301,6 +252,7 @@ in
     services = {
         pipewire.enable = false;
         pulseaudio.enable = true;
+        fwupd.enable = true;
         udev.packages = [ pipa-device bootmac ];
         udev.extraRules = ''
             SUBSYSTEM=="misc", KERNEL=="fastrpc-adsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
