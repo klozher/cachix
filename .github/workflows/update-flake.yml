@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -26,10 +26,7 @@ jobs:
           path: flake.lock
 
   build:
-    needs: update-lock
-    runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
       matrix:
         include:
           - hostname: "gurren"
@@ -37,14 +34,17 @@ jobs:
           - hostname: "pipa"
             os: "ubuntu-24.04-arm"
 
+    needs: update-lock
+    runs-on: ${{ matrix.os }}
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
 
-      - name: Upload to cachix afterwards
+      - name: Upload to cachix
         uses: cachix/cachix-action@v17
         with:
           name: klozher
@@ -54,7 +54,7 @@ jobs:
         run: nix build .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel --show-trace
 
       - name: Download updated lockfile
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: updated-flake-lock
 
@@ -67,25 +67,21 @@ jobs:
     if: success()
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download updated lockfile
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: updated-flake-lock
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update flake.lock (multi-arch validated)"
-          committer: "GitHub Action <action@github.com>"
-          author: "GitHub Action <action@github.com>"
-          branch: "auto-update-flake"
           delete-branch: true
-          title: "chore(deps): auto update flake.lock"
+          branch: "auto-update-flake"
+          commit-message: "chore: auto update flake.lock (all hosts validated)"
+          title: "chore: auto update flake.lock"
           body: |
             This is an automated PR to update `flake.lock`.
-            
-            **Validation Status:**
-            - [x] Multi-architecture simulation builds passed successfully.
+            All hosts builds passed successfully.
