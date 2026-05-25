@@ -46,6 +46,7 @@ in {
                             ".config/openrazer"
                             ".vscode"
                             ".config/Code"
+                            ".local/share/applications"
                             ".local/share/io.github.clash-verge-rev.clash-verge-rev"
                             ".local/share/Anki2"
                             ".local/share/umu"
