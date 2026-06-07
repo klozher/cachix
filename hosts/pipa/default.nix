@@ -12,5 +12,9 @@
     services.tlp.enable = true;
     services.tlp.pd.enable = true;
     services.power-profiles-daemon.enable = false;
+
+    environment.sessionVariables = {
+        GSK_RENDERER = "gl";
+    };
 }
 
