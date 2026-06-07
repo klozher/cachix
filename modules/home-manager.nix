@@ -50,6 +50,7 @@ in {
                             ".local/share/io.github.clash-verge-rev.clash-verge-rev"
                             ".local/share/Anki2"
                             ".local/share/umu"
+                            ".local/share/eden"
                             ".local/state/wireplumber"
                             ".config/dconf"
                             ".config/pulse"
