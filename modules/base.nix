@@ -3,7 +3,7 @@
     system.stateVersion = "25.11";
     nix.settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        substituters = lib.mkForce [ "https://mirror.sjtu.edu.cn/nix-channels/store" ];
+        substituters = [ "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store" ];
         extra-substituters = [ "https://klozher.cachix.org" ];
         extra-trusted-public-keys = ["klozher.cachix.org-1:ohD7Cqxgjj2vLp4m+5vW4x4TVn0C2LVk6qeCZ7faEm8="];
         flake-registry = "";
