@@ -27,6 +27,7 @@ jobs:
 
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - hostname: "gurren"
