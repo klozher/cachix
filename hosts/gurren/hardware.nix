@@ -38,7 +38,7 @@
         graphics.enable = true;
         nvidia = {
             open = true;
-            package = config.boot.kernelPackages.nvidiaPackages.beta;
+            package = config.boot.kernelPackages.nvidiaPackages.bleeding_edge;
             powerManagement.enable = true;
             nvidiaPersistenced = true;
         };
