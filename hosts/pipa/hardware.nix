@@ -74,10 +74,15 @@ let
          	dev_dbg(dev, "Found FSA4480 v%lu.%lu (Vendor ID = %lu)\n",
          		FIELD_GET(FSA4480_DEVICE_ID_VERSION_ID, val),
     '';
-in
-{
-    boot = {
-        kernelPackages = pkgs.linuxPackages_latest;
+    linux_7_0_10 = pkgs.callPackage ({buildLinux, fetchurl, ...}: buildLinux {
+        src = fetchurl {
+            url = "mirror://kernel/linux/kernel/v7.x/linux-7.0.10.tar.xz";
+            hash = "sha256:1p1j9s0b4qv9m0pm6vj477rqgyd1b0lsk0gy74cks3n2cbmpfj89";
+        };
+        version = "7.0.10";
+        isLTS = false;
+        modDirVersion = lib.versions.pad 3 "7.0.10";
+        extraMeta.branch = "7.0";
         kernelPatches = [{
             patch = "${fsa4480-nodev-fix}";
         } {
@@ -116,6 +121,11 @@ in
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0012-HACK-ASoC-qcom-qdsp6-q6afe-pretend-the-AFE-vote-didn.patch";
         }];
+    }) {};
+in
+{
+    boot = {
+        kernelPackages = pkgs.linuxPackagesFor linux_7_0_10;
         kernelParams = [
             "resume=/dev/disk/by-partlabel/super"
 #          "zswap.enabled=1" "zswap.compressor=zstd" "zswap.max_pool_percent=20" "zswap.shrinker_enabled=1"
