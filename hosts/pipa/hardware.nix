@@ -77,7 +77,7 @@ let
 in
 {
     boot = {
-        kernelPackages = pkgs.linuxPackages_7_0;
+        kernelPackages = pkgs.linuxPackages_latest;
         kernelPatches = [{
             patch = "${fsa4480-nodev-fix}";
         } {
