@@ -16,12 +16,12 @@
       system = system;
       specialArgs = { inherit inputs; };
       modules = [
+        modules/base.nix
         modules/hardware.nix
         modules/agenix.nix
         modules/nixvim.nix
         modules/desktop.nix
-        modules/home-manager.nix
-        modules/base.nix
+        modules/home-manager
         hosts/${host}
         { networking.hostName = host; }
       ];
