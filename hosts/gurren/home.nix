@@ -16,6 +16,9 @@
         anki-bin
 
         unrar
+
+        qq
+        wechat
     ] ++ (with pkgs.kdePackages; [
         yakuake
     ]);
@@ -34,6 +37,8 @@
         entries = map (name: "${config.home.profileDirectory}/share/applications/" + name + ".desktop") [
             "org.kde.yakuake"
             "jellyfin-mpv-shim"
+            "wechat"
+            "qq"
         ];
     };
     programs.plasma = {
