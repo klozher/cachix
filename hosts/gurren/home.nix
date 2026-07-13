@@ -19,9 +19,7 @@
 
         qq
         wechat
-    ] ++ (with pkgs.kdePackages; [
-        yakuake
-    ]);
+    ];
     home.sessionVariables = {
         QT_IM_MODULE="fcitx";
         MOZ_DISABLE_RDD_SANDBOX = "1";
@@ -35,7 +33,6 @@
     xdg.autostart = {
         enable = true;
         entries = map (name: "${config.home.profileDirectory}/share/applications/" + name + ".desktop") [
-            "org.kde.yakuake"
             "jellyfin-mpv-shim"
             "wechat"
             "qq"

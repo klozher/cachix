@@ -45,6 +45,12 @@ in {
                     ];
                 };
             };
+            environment.systemPackages = [(
+                pkgs.makeAutostartItem {
+                    name = "org.kde.yakuake";
+                    package = pkgs.kdePackages.yakuake;
+                }
+            )];
         })
         (lib.mkIf (cfg.desktop == "gnome") {
             services = {
