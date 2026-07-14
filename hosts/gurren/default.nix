@@ -29,7 +29,6 @@
     };
     services.scx.enable = true;
     services.scx.scheduler = "scx_lavd";
-    services.input-remapper.enable = true;
 
     #    services.wivrn = {
     #        enable = true;
