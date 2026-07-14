@@ -29,6 +29,7 @@
     users.mutableUsers = false;
     users.users.sice = {
         uid = 1000;
+        linger = true;
         createHome = true;
         isNormalUser = true;
         extraGroups = [ "wheel" "samba" "libvirtd" "cdrom" "input" ];

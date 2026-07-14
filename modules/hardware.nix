@@ -31,13 +31,16 @@ in {
             hideMounts = true;
             directories = [
                 "/etc/nixos"
+                "/etc/mihomo"
                 "/etc/NetworkManager/system-connections"
                 "/var/log"
+                "/var/lib/kodi"
                 "/var/lib/nixos"
                 "/var/lib/alsa"
                 "/var/lib/samba"
                 "/var/lib/waydroid"
                 "/var/lib/bluetooth"
+                "/var/lib/containers"
                 "/var/lib/libvirt"
             ];
             files = [

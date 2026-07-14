@@ -10,6 +10,7 @@ in {
                 "Documents"
                 "Games"
                 "projects"
+                "containers"
                 ".steam"
                 ".xwechat"
                 ".local/share/Steam"
@@ -17,6 +18,9 @@ in {
                 ".mozilla"
                 ".config/QQ"
                 ".config/zsh"
+                ".config/dconf"
+                ".config/pulse"
+                ".config/containers"
                 ".config/mozilla"
                 ".config/git"
                 ".config/fcitx5"
@@ -32,9 +36,8 @@ in {
                 ".local/share/Anki2"
                 ".local/share/umu"
                 ".local/share/eden"
+                ".local/share/containers"
                 ".local/state/wireplumber"
-                ".config/dconf"
-                ".config/pulse"
                 ".local/share/waydroid"
             ];
             files = [
