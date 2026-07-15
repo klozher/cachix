@@ -3,7 +3,10 @@
     system.stateVersion = "25.11";
     nix.settings = {
         experimental-features = [ "nix-command" "flakes" ];
-        substituters = [ "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store" ];
+        substituters = [
+            "https://mirrors.ustc.edu.cn/nix-channels/store?priority=30"
+            "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=35"
+        ];
         extra-substituters = [ "https://klozher.cachix.org" ];
         extra-trusted-public-keys = ["klozher.cachix.org-1:ohD7Cqxgjj2vLp4m+5vW4x4TVn0C2LVk6qeCZ7faEm8="];
         flake-registry = "";
