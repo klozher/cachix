@@ -32,7 +32,7 @@
         linger = true;
         createHome = true;
         isNormalUser = true;
-        extraGroups = [ "wheel" "samba" "libvirtd" "cdrom" "input" ];
+        extraGroups = [ "wheel" "samba" "libvirtd" "cdrom" "input" "networkmanager" ];
         shell = pkgs.zsh;
         openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPr8P8HoWx5U16EvZZ6QdlxnnZ0QYBg1UFO8wr9pwTs sice@gurren"
