@@ -36,6 +36,8 @@ jobs:
             os: "ubuntu-24.04-arm"
           - hostname: "giga"
             os: "ubuntu-24.04"
+          - hostname: "lagann"
+            os: "ubuntu-24.04"
 
     needs: update-lock
     runs-on: ${{ matrix.os }}
