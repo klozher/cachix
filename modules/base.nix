@@ -42,6 +42,7 @@
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG0bzqib802Y+PQ0ss0irr4dFE/Plpns8pMhKnfgAK04 sice@t50"
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOPtHsNZjivWUit3CWaoM1Z/36zg1BKeJhv5pufVzmIP sice@pipa"
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF7eR3TMICXrbCIoUtzHPOvSFu/iKvKMQThfS9+pj5VX sice@giga"
+            "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJV2gos20uFOdj3c7WEi7w80/x6+yezuQPo1o+MaF1J6 sice@lagann"
         ];
     };
 
