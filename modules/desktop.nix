@@ -5,17 +5,11 @@ in {
     options.klozher.desktop = {
         enable = lib.mkEnableOption "Enable desktop";
         desktop = lib.mkOption {
-            type = lib.types.enum [ "plasma" "gnome" ];
+            type = lib.types.enum [ "plasma" "gnome" "tile" ];
         };
     };
     config = lib.mkIf cfg.enable (lib.mkMerge [
         {
-            services.displayManager = {
-                autoLogin.enable = true;
-                autoLogin.user = "sice";
-            };
-            fonts.enableDefaultPackages = false;
-            fonts.packages = with pkgs; [ sarasa-gothic ];
             programs.kdeconnect.enable = true;
             i18n.extraLocales = [
                 "zh_CN.UTF-8/UTF-8"
@@ -45,6 +39,8 @@ in {
                     ];
                 };
             };
+            fonts.enableDefaultPackages = false;
+            fonts.packages = with pkgs; [ sarasa-gothic ];
             environment.systemPackages = [(
                 pkgs.makeAutostartItem {
                     name = "org.kde.yakuake";
@@ -64,6 +60,8 @@ in {
                     gnome-remote-desktop.enable = false;
                 };
             };
+            fonts.enableDefaultPackages = false;
+            fonts.packages = with pkgs; [ sarasa-gothic ];
             programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
             environment.systemPackages = with pkgs; [
                 dconf-editor
@@ -77,6 +75,24 @@ in {
                     mozc
                 ];
             };
+        })
+        (lib.mkIf (cfg.desktop == "tile") {
+            services.displayManager.ly = {
+                enable = true;
+            };
+            programs.hyprland = {
+                enable = true;
+                withUWSM = true;
+            };
+            programs.niri = {
+                enable = true;
+            };
+            environment.systemPackages = with pkgs; [
+                yazi
+                kitty
+                fuzzel
+                hyprlauncher
+            ];
         })
     ]);
 }

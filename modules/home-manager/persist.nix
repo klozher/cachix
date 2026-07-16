@@ -18,6 +18,8 @@ in {
                 ".mozilla"
                 ".config/QQ"
                 ".config/zsh"
+                ".config/hypr"
+                ".config/niri"
                 ".config/dconf"
                 ".config/pulse"
                 ".config/containers"
