@@ -1,7 +1,7 @@
 { config, pkgs, lib, inputs, ... }:
 {
     boot = {
-        loader.timeout = 10;
+        loader.timeout = null;
         loader.grub.enable = true;
         loader.grub.device = "nodev";
         loader.grub.efiSupport = true;
