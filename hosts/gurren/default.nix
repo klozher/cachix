@@ -1,6 +1,9 @@
 { config, pkgs, lib, inputs, ... }:
 {
-    imports = [ ./hardware.nix ];
+    imports = [
+        ./hardware.nix
+        inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
+    ];
     klozher.agenix.enable = true;
     klozher.desktop.enable = true;
     klozher.desktop.desktop = "plasma";
@@ -42,6 +45,13 @@
         openFirewall = true;
         usershares.enable = true;
     };
+    environment.systemPackages = with pkgs; [
+        stardust-xr-server
+        stardust-xr-flatland
+        stardust-xr-atmosphere
+        stardust-xr-protostar
+        stardust-xr-kiara
+    ];
     #programs.cdemu.enable = true;
 }
 
