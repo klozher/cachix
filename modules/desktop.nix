@@ -19,6 +19,10 @@ in {
                 "ja_JP.UTF-8/UTF-8"
                 "ja_JP.EUC-JP/EUC-JP"
             ];
+            environment.systemPackages = with pkgs; [
+                wl-clipboard
+                xclip
+            ];
         }
         (lib.mkIf (cfg.desktop == "plasma") {
             services.displayManager = {
