@@ -10,6 +10,7 @@ in {
     };
     config = lib.mkIf cfg.enable (lib.mkMerge [
         {
+            fonts.packages = [ pkgs.nerd-fonts.symbols-only ];
             programs.kdeconnect.enable = true;
             i18n.extraLocales = [
                 "zh_CN.UTF-8/UTF-8"
@@ -87,10 +88,22 @@ in {
             programs.niri = {
                 enable = true;
             };
+            i18n.inputMethod = {
+                enable = true;
+                type = "fcitx5";
+                fcitx5 = {
+                    waylandFrontend = true;
+                    addons = with pkgs; [
+                        qt6Packages.fcitx5-chinese-addons
+                        fcitx5-mozc-ut
+                    ];
+                };
+            };
             environment.systemPackages = with pkgs; [
                 yazi
                 kitty
                 fuzzel
+                waybar
                 hyprlauncher
             ];
         })
