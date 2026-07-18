@@ -36,6 +36,7 @@ let
         [osConfig.programs.clash-verge.enable [] [".local/share/io.github.clash-verge-rev.clash-verge-rev"]]
         [config.programs.vscode.enable [] [".vscode" ".config/Code"]]
         [config.programs.anki.enable [] [".local/share/Anki2"]]
+        [config.programs.aider-chat.enable [".aider.conf.yml"] [".aider"]]
         [config.services.podman.enable [] [".local/share/containers"]]
         [(hasPkg "qq") [] [".config/QQ"]]
         [(hasPkg "wechat") [] [".xwechat"]]

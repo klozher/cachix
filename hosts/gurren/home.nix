@@ -136,4 +136,7 @@
     programs.vscode = {
         enable = true;
     };
+    programs.aider-chat = {
+        enable = true;
+    };
 }
