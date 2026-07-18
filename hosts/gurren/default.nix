@@ -8,7 +8,6 @@
     klozher.home-manager.enable = true;
     klozher.home-manager.users.sice = import ./home.nix;
 
-    nixpkgs.config.cudaSupport = true;
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     boot.kernelModules = ["ntsync"];
     virtualisation.libvirtd.enable = true;
@@ -33,6 +32,7 @@
 
     services.wivrn = {
         enable = true;
+        package = (pkgs.wivrn.override { cudaSupport = true; });
         openFirewall = true;
         steam.importOXRRuntimes = true;
         highPriority = true;
