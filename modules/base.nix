@@ -16,7 +16,6 @@
         home-manager.flake = inputs.home-manager;
     };
     nixpkgs.config.allowUnfree= true;
-    nixpkgs.config.allowUnsupportedSystem = true;
 
     services.openssh.enable = true;
     services.openssh.startWhenNeeded = true;
