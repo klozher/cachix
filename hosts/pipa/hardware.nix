@@ -4,8 +4,8 @@ let
         domain = "gitlab.postmarketos.org";
         owner = "postmarketOS";
         repo = "pmaports";
-        rev = "632197dd74360977197e249149ded06e68f4a01a";
-        hash = "sha256-dhCxdMaKwqQO57hFcgnNGZ5xNceR3RaXITjl04yxrJ8=";
+        rev = "61d5db0ca467e9296d0e901b99fa2557a9e3406d";
+        hash = "sha256-FMZjUtvcDu17Xwd6h53Oo1nkTaYtVMZoslTRqfogkVQ=";
     };
     pipa-firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "pipa-firmware";
@@ -31,10 +31,9 @@ let
         postBuild = ''
             device_xiaomi_pipa="${pmports}/device/testing/device-xiaomi-pipa"
             install -Dm644 "$device_xiaomi_pipa/81-libssc-xiaomi-pipa.rules" -t "$out/lib/udev/rules.d/"
-            install -Dm644 "$device_xiaomi_pipa/hexagonrpcd-sdsp.conf" -t "$out/share/hexagonrpcd/"
             install -Dm644 "$device_xiaomi_pipa/pipa.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
             install -Dm644 "$device_xiaomi_pipa/HiFi.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
-            ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/Xiaomi Pad 6.conf"
+            ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/xiaomi-XiaomiPad6.conf"
         '';
     };
     bootmac = pkgs.stdenv.mkDerivation rec {
@@ -74,15 +73,15 @@ let
          	dev_dbg(dev, "Found FSA4480 v%lu.%lu (Vendor ID = %lu)\n",
          		FIELD_GET(FSA4480_DEVICE_ID_VERSION_ID, val),
     '';
-    linux_7_0_10 = pkgs.callPackage ({buildLinux, fetchurl, ...}: buildLinux {
+    linux_pipa = pkgs.callPackage ({buildLinux, fetchurl, ...}: buildLinux {
         src = fetchurl {
-            url = "mirror://kernel/linux/kernel/v7.x/linux-7.0.10.tar.xz";
-            hash = "sha256:1p1j9s0b4qv9m0pm6vj477rqgyd1b0lsk0gy74cks3n2cbmpfj89";
+            url = "mirror://kernel/linux/kernel/v7.x/linux-7.1.3.tar.xz";
+            hash = "sha256:1p6iknvzmd04alrf49zn8mxw863v0yzgznyckfhl4llgx1lc0hdy";
         };
-        version = "7.0.10";
+        version = "7.1.3";
         isLTS = false;
-        modDirVersion = lib.versions.pad 3 "7.0.10";
-        extraMeta.branch = "7.0";
+        modDirVersion = lib.versions.pad 3 "7.1.3";
+        extraMeta.branch = "7.1";
         kernelPatches = [{
             patch = "${fsa4480-nodev-fix}";
         } {
@@ -113,19 +112,24 @@ let
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0008-ASoC-qcom-sm8250-add-tertiary-tdm-support.patch";
         } {
-            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0009-UPSTREAM-ASoC-codecs-aw88261-backport-linux-next-cha.patch";
-        } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0010-HACK-ASoC-codecs-aw88261-add-xiaomi-pipa-hacks.patch";
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0011-FROMLIST-ASoC-qcom-qdsp6-q6afe-fix-clk-vote-response.patch";
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0012-HACK-ASoC-qcom-qdsp6-q6afe-pretend-the-AFE-vote-didn.patch";
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0013-Input-keyboard-add-Xiaomi-Nanosic-803-keyboard.patch";
+            structuredExtraConfig = {
+                KEYBOARD_XIAOMI_NANOSIC803 = lib.kernel.yes;
+            };
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0014-UPSTREAM-libbpf-Fix-UAF-in-strset__add_str.patch";
         }];
     }) {};
 in
 {
     boot = {
-        kernelPackages = pkgs.linuxPackagesFor linux_7_0_10;
+        kernelPackages = pkgs.linuxPackagesFor linux_pipa;
         kernelParams = [
             "resume=/dev/disk/by-partlabel/super"
 #          "zswap.enabled=1" "zswap.compressor=zstd" "zswap.max_pool_percent=20" "zswap.shrinker_enabled=1"
