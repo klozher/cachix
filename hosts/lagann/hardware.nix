@@ -18,16 +18,16 @@
     klozher.tmpfs-on-root = {
         enable = true;
         persistDev = {
-            device = "UUID=847c00f5-3329-4117-bba9-f0de957056a7";
+            device = "UUID=2f2e05a2-3f1e-4530-a769-c6b6ad6c7885";
             fsType = "btrfs";
-            options = [ "compress-force=zstd:3" "noatime" "subvol=@" ];
+            options = [ "noatime" "ssd" "discard=async,space_cache=v2" "compress-force=zstd:3" ];
         };
     };
     fileSystems = {
         "/boot" = {
-            device = "UUID=847c00f5-3329-4117-bba9-f0de957056a7";
+            device = "UUID=2f2e05a2-3f1e-4530-a769-c6b6ad6c7885";
             fsType = "btrfs";
-            options = [ "compress-force=zstd:3" "noatime" "subvol=@/boot" ];
+            options = [ "noatime" "ssd" "discard=async,space_cache=v2" "subvol=boot" ];
         };
     };
     services.pipewire.enable = true;
