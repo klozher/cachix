@@ -22,6 +22,8 @@ in {
           softtabstop = -1;
           expandtab = true;
           list = true;
+          wrap = false;
+          smartcase = true;
         };
         plugins = {
           lsp = {
