@@ -70,5 +70,6 @@ in {
                 Service.ExecStart = "${pipa-pwrkey-handler}/bin/pipa-pwrkey-handler";
             };
         };
+    programs.aider-chat.enable = true;
 }
 
