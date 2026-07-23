@@ -14,7 +14,6 @@
     services.power-profiles-daemon.enable = false;
 
     environment.sessionVariables = {
-        GSK_RENDERER = "gl";
         XDG_DATA_DIRS = [ "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}" ];
     };
 }
