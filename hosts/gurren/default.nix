@@ -46,6 +46,7 @@
         usershares.enable = true;
     };
     environment.systemPackages = with pkgs; [
+        wayvr
         stardust-xr-server
         stardust-xr-flatland
         stardust-xr-atmosphere
