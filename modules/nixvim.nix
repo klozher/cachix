@@ -23,7 +23,9 @@ in {
           expandtab = true;
           list = true;
           wrap = false;
+          ignorecase = true;
           smartcase = true;
+          number = true;
         };
         plugins = {
           lsp = {
