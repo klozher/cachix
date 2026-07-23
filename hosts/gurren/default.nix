@@ -47,11 +47,12 @@
     };
     environment.systemPackages = with pkgs; [
         wayvr
-        stardust-xr-server
-        stardust-xr-flatland
-        stardust-xr-atmosphere
-        stardust-xr-protostar
-        stardust-xr-kiara
+        #TODO: disable stardust-xr for now
+        #stardust-xr-server
+        #stardust-xr-flatland
+        #stardust-xr-atmosphere
+        #stardust-xr-protostar
+        #stardust-xr-kiara
     ];
     #programs.cdemu.enable = true;
 }
