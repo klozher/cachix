@@ -7,8 +7,8 @@
         loader.grub.efiSupport = true;
         loader.grub.efiInstallAsRemovable = true;
         loader.efi.canTouchEfiVariables = false;
-        kernelParams = [ ];
-        initrd.kernelModules = [ "uas" ];
+        kernelParams = [ "usb-storage.quirks=152d:a580:u" ];
+        initrd.kernelModules = [ "usb-storage" ];
         initrd.systemd.enable = true;
         tmp.useTmpfs = true;
         tmp.tmpfsSize = "100%";
