@@ -51,7 +51,7 @@ in {
                     name = "org.kde.yakuake";
                     package = pkgs.kdePackages.yakuake;
                 }
-            )];
+            ) pkgs.kdePackages.yakuake ];
         })
         (lib.mkIf (cfg.desktop == "gnome") {
             services = {
