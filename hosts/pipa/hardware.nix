@@ -4,8 +4,8 @@ let
         domain = "gitlab.postmarketos.org";
         owner = "postmarketOS";
         repo = "pmaports";
-        rev = "61d5db0ca467e9296d0e901b99fa2557a9e3406d";
-        hash = "sha256-FMZjUtvcDu17Xwd6h53Oo1nkTaYtVMZoslTRqfogkVQ=";
+        rev = "db1fe3c1c118e5259246f3cd3fcbeeb4e44a9eeb";
+        hash = "";
     };
     pipa-firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "pipa-firmware";
@@ -34,6 +34,7 @@ let
             install -Dm644 "$device_xiaomi_pipa/pipa.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
             install -Dm644 "$device_xiaomi_pipa/HiFi.conf" -t "$out/share/alsa/ucm2/Xiaomi/pipa/"
             ln -s "../../Xiaomi/pipa/pipa.conf" "$out/share/alsa/ucm2/conf.d/sm8250/xiaomi-XiaomiPad6.conf"
+            install -Dm644 "$device_xiaomi_pipa/local-overrides.quirks" -t "$out/etc/libinput/"
         '';
     };
     bootmac = pkgs.stdenv.mkDerivation rec {
@@ -75,12 +76,12 @@ let
     '';
     linux_pipa = pkgs.callPackage ({buildLinux, fetchurl, ...}: buildLinux {
         src = fetchurl {
-            url = "mirror://kernel/linux/kernel/v7.x/linux-7.1.3.tar.xz";
-            hash = "sha256:1p6iknvzmd04alrf49zn8mxw863v0yzgznyckfhl4llgx1lc0hdy";
+            url = "mirror://kernel/linux/kernel/v7.x/linux-7.1.4.tar.xz";
+            hash = "";
         };
-        version = "7.1.3";
+        version = "7.1.4";
         isLTS = false;
-        modDirVersion = lib.versions.pad 3 "7.1.3";
+        modDirVersion = lib.versions.pad 3 "7.1.4";
         extraMeta.branch = "7.1";
         kernelPatches = [{
             patch = "${fsa4480-nodev-fix}";
@@ -120,10 +121,15 @@ let
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0013-Input-keyboard-add-Xiaomi-Nanosic-803-keyboard.patch";
             structuredExtraConfig = {
-                KEYBOARD_XIAOMI_NANOSIC803 = lib.kernel.yes;
+                KEYBOARD_XIAOMI_NANOSIC803 = lib.kernel.module;
             };
         } {
             patch = "${pmports}/device/testing/linux-xiaomi-pipa/0014-UPSTREAM-libbpf-Fix-UAF-in-strset__add_str.patch";
+        } {
+            patch = "${pmports}/device/testing/linux-xiaomi-pipa/0016-power-supply-add-nuvolta-rx1665-wireless-charger.patch";
+            structuredExtraConfig = {
+                FUDA_1665 = lib.kernel.module;
+            };
         }];
     }) {};
 in
@@ -161,7 +167,9 @@ in
                 "llcc_qcom"
                 "lpass_gfm_sm8250"
                 "msm"
+                "nanosic_803"
                 "nt36523_ts"
+                "nu1665"
                 "ov13b10"
                 "panel_novatek_nt36532"
                 "pci_pwrctrl_pwrseq"
