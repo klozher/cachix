@@ -5,7 +5,7 @@ let
         owner = "postmarketOS";
         repo = "pmaports";
         rev = "db1fe3c1c118e5259246f3cd3fcbeeb4e44a9eeb";
-        hash = "";
+        hash = "sha256-MAFc90rO97xOH/zB/4fY1lNyLVsjAMB5HyEifMvZVrg=";
     };
     pipa-firmware = pkgs.stdenvNoCC.mkDerivation {
         pname = "pipa-firmware";
