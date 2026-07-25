@@ -77,7 +77,7 @@ let
     linux_pipa = pkgs.callPackage ({buildLinux, fetchurl, ...}: buildLinux {
         src = fetchurl {
             url = "mirror://kernel/linux/kernel/v7.x/linux-7.1.4.tar.xz";
-            hash = "";
+            hash = "sha256-HGOSKhGWddOOOuD49u4H8VxBp4arntZlY3SbuMmgji4=";
         };
         version = "7.1.4";
         isLTS = false;
