@@ -17,11 +17,12 @@
       specialArgs = { inherit inputs; };
       modules = [
         modules/base.nix
+        modules/home-manager
+        modules/state.nix
         modules/hardware.nix
         modules/agenix.nix
         modules/nixvim.nix
         modules/desktop.nix
-        modules/home-manager
         hosts/${host}
         { networking.hostName = host; }
       ];
