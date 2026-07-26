@@ -6,6 +6,7 @@
         loader.efi.canTouchEfiVariables = true;
         kernelPackages = pkgs.linuxPackages_latest;
         kernelParams = [];
+        kernelModules = [ "nct6775" ];
         initrd.kernelModules = [ ];
         initrd.systemd.enable = true;
         tmp.useTmpfs = true;

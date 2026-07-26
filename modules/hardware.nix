@@ -33,6 +33,7 @@ in {
                 "/etc/nixos"
                 "/etc/mihomo"
                 "/etc/NetworkManager/system-connections"
+                "/etc/coolercontrol"
                 "/var/log"
                 "/var/lib/kodi"
                 "/var/lib/nixos"
