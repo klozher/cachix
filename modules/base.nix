@@ -20,6 +20,11 @@
         nixpkgs.flake = inputs.nixpkgs;
         home-manager.flake = inputs.home-manager;
     };
+    nix.gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 7d";
+    };
     nixpkgs.config.allowUnfree= true;
 
     services.openssh.enable = true;
