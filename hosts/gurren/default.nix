@@ -4,6 +4,7 @@
         ./hardware.nix
         inputs.nixpkgs-xr.nixosModules.nixpkgs-xr
     ];
+    klozher.persist.enable = true;
     klozher.agenix.enable = true;
     klozher.desktop.enable = true;
     klozher.desktop.desktop = "plasma";

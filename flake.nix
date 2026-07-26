@@ -20,6 +20,7 @@
         modules/home-manager
         modules/state.nix
         modules/hardware.nix
+        modules/persist.nix
         modules/agenix.nix
         modules/nixvim.nix
         modules/desktop.nix

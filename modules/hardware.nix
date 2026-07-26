@@ -2,7 +2,6 @@
 let
     cfg = config.klozher.tmpfs-on-root;
 in {
-    imports = [ inputs.impermanence.nixosModules.impermanence ];
     options.klozher.tmpfs-on-root = {
         enable = lib.mkEnableOption "Enable tmpfs on root";
         persistDev = lib.mkOption {
@@ -25,32 +24,6 @@ in {
                 neededForBoot = true;
                 options = cfg.persistDev.options ++ [ "X-mount.subdir=persist" ];
             };
-        };
-        environment.persistence."/persist" = {
-            enable = true;
-            hideMounts = true;
-            directories = [
-                "/etc/nixos"
-                "/etc/mihomo"
-                "/etc/NetworkManager/system-connections"
-                "/etc/coolercontrol"
-                "/var/log"
-                "/var/lib/kodi"
-                "/var/lib/nixos"
-                "/var/lib/alsa"
-                "/var/lib/samba"
-                "/var/lib/waydroid"
-                "/var/lib/bluetooth"
-                "/var/lib/containers"
-                "/var/lib/libvirt"
-            ];
-            files = [
-                "/etc/machine-id"
-                "/etc/ssh/ssh_host_rsa_key"
-                "/etc/ssh/ssh_host_rsa_key.pub"
-                "/etc/ssh/ssh_host_ed25519_key"
-                "/etc/ssh/ssh_host_ed25519_key.pub"
-            ];
         };
     };
 }

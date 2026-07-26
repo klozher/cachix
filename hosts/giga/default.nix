@@ -25,6 +25,7 @@ let
     };
 in {
     imports = [ ./hardware.nix ];
+    klozher.persist.enable = true;
     klozher.agenix.enable = true;
     klozher.neovim.enable = true;
     klozher.home-manager.enable = true;

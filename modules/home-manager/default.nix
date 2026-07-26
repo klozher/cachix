@@ -18,7 +18,6 @@ in {
         home-manager.extraSpecialArgs = { osConfig = config; };
         home-manager.sharedModules = [
             inputs.plasma-manager.homeModules.plasma-manager
-            ./persist.nix
             ./programs.nix
         ];
     };
