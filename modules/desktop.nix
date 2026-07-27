@@ -25,6 +25,9 @@ in {
             ];
         }
         (lib.mkIf (cfg.desktop == "plasma") {
+            home-manager.sharedModules = [
+                inputs.plasma-manager.homeModules.plasma-manager
+            ];
             services.displayManager = {
                 enable = true;
                 plasma-login-manager.enable = true;
