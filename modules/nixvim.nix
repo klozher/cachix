@@ -54,6 +54,10 @@ in {
                 };
                 rainbow-delimiters.enable = true;
                 grug-far.enable = true;
+                telescope.enable = true;
+                persisted.enable = true;
+                persisted.enableTelescope = true;
+                lualine.enable = true;
             };
             extraPlugins = [
                 pkgs.vimPlugins.focus-nvim
