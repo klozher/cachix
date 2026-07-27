@@ -14,7 +14,6 @@
 
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     boot.kernelModules = ["ntsync"];
-    virtualisation.libvirtd.enable = true;
     programs = {
         steam = {
             enable = true;
