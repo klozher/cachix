@@ -33,6 +33,7 @@
     nixosConfigurations = builtins.mapAttrs nixosFor {
       gurren = "x86_64-linux";
       lagann = "x86_64-linux";
+      t50 = "x86_64-linux";
       giga = "x86_64-linux";
       pipa = "aarch64-linux";
     };
