@@ -4,7 +4,6 @@
         loader.timeout = 0;
         loader.systemd-boot.enable = true;
         loader.efi.canTouchEfiVariables = true;
-        kernelPackages = pkgs.linuxPackages_latest;
         kernelParams = [];
         initrd.kernelModules = [ ];
         initrd.systemd.enable = true;
