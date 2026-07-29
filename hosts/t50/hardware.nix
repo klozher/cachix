@@ -18,7 +18,7 @@
     klozher.tmpfs-on-root = {
         enable = true;
         persistDev = {
-            device = "UUID=bca7958a-d5de-446b-bb9d-3e8569620f3a";
+            device = "UUID=8b8b1227-fd63-4c06-982c-a88af3b66bcc";
             fsType = "bcachefs";
             options = [
                 "noatime" "discard"
