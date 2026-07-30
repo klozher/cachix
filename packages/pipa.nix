@@ -19,8 +19,8 @@ gnugrep,util-linux,gnused,bluez,gawk,iproute2,
         domain = "gitlab.postmarketos.org";
         owner = "postmarketOS";
         repo = "pmaports";
-        rev = "db1fe3c1c118e5259246f3cd3fcbeeb4e44a9eeb";
-        hash = "sha256-MAFc90rO97xOH/zB/4fY1lNyLVsjAMB5HyEifMvZVrg=";
+        rev = "4a6b2648f02536718f787dd4609dfe43f3cd7c83";
+        hash = "sha256-W4AiVjmXVp3fqr7DtqzJgltwM2i6Db+mVT9iraf0J/k=";
     };
     pipa-firmware = stdenvNoCC.mkDerivation {
         pname = "pipa-firmware";
