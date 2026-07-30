@@ -1,45 +1,50 @@
 {
-  description = "A very basic flake";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    impermanence.url = "github:nix-community/impermanence";
-    home-manager.url = "github:nix-community/home-manager";
-    plasma-manager.url = "github:nix-community/plasma-manager";
-    agenix.url = "github:ryantm/agenix";
-    nixvim.url = "github:nix-community/nixvim";
-    nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
-  };
+    description = "A very basic flake";
+    inputs = {
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+        flake-parts.url = "github:hercules-ci/flake-parts";
+        systems.url = "github:nix-systems/default-linux";
+        home-manager.url = "github:nix-community/home-manager";
+        impermanence.url = "github:nix-community/impermanence";
+        plasma-manager.url = "github:nix-community/plasma-manager";
+        agenix.url = "github:ryantm/agenix";
+        nixvim.url = "github:nix-community/nixvim";
+        nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
+    };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-  let
-    nixosFor = host: system: nixpkgs.lib.nixosSystem {
-      system = system;
-      specialArgs = { inherit inputs; };
-      modules = [
-        modules/base.nix
-        modules/home-manager
-        modules/state.nix
-        modules/hardware.nix
-        modules/persist.nix
-        modules/agenix.nix
-        modules/nixvim.nix
-        modules/desktop.nix
-        hosts/${host}
-        { networking.hostName = host; }
-      ];
-    };
-  in {
-    inherit inputs;
-    nixosConfigurations = builtins.mapAttrs nixosFor {
-      gurren = "x86_64-linux";
-      lagann = "x86_64-linux";
-      t50 = "x86_64-linux";
-      giga = "x86_64-linux";
-      pipa = "aarch64-linux";
-    };
-  };
+    outputs = { self, nixpkgs, flake-parts, systems, ... }@inputs:
+        flake-parts.lib.mkFlake { inherit inputs; } {
+            systems = import systems;
+            perSystem = { config, self', inputs', pkgs, system, ... }: {
+            };
+            flake = let
+                nixosFor = host: system: nixpkgs.lib.nixosSystem {
+                    system = system;
+                    specialArgs = { inherit inputs; };
+                    modules = [
+                        modules/base.nix
+                        modules/home-manager
+                        modules/state.nix
+                        modules/hardware.nix
+                        modules/persist.nix
+                        modules/agenix.nix
+                        modules/nixvim.nix
+                        modules/desktop.nix
+                        hosts/${host}
+                        { networking.hostName = host; }
+                    ];
+                };
+            in {
+                nixosConfigurations = builtins.mapAttrs nixosFor {
+                    gurren = "x86_64-linux";
+                    lagann = "x86_64-linux";
+                    t50 = "x86_64-linux";
+                    giga = "x86_64-linux";
+                    pipa = "aarch64-linux";
+                };
+            };
+        };
 }
 
 
-# vim: set tabstop=8 softtabstop=2 shiftwidth=2 expandtab:
 
