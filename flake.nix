@@ -16,6 +16,7 @@
         flake-parts.lib.mkFlake { inherit inputs; } {
             systems = import systems;
             perSystem = { config, self', inputs', pkgs, system, ... }: {
+                packages = pkgs.callPackages packages/pipa.nix {};
             };
             flake = let
                 nixosFor = host: system: nixpkgs.lib.nixosSystem {
@@ -31,7 +32,10 @@
                         modules/nixvim.nix
                         modules/desktop.nix
                         hosts/${host}
-                        { networking.hostName = host; }
+                        {
+                            networking.hostName = host;
+                            nixpkgs.overlays = [ (final: prev: self.packages.${system}) ];
+                        }
                     ];
                 };
             in {
