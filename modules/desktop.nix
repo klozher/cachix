@@ -10,15 +10,9 @@ in {
     };
     config = lib.mkIf cfg.enable (lib.mkMerge [
         {
+            klozher.i18n.enable = true;
             fonts.packages = [ pkgs.nerd-fonts.symbols-only ];
             programs.kdeconnect.enable = true;
-            i18n.extraLocales = [
-                "zh_CN.UTF-8/UTF-8"
-                "zh_CN.GB18030/GB18030"
-                "zh_CN.GBK/GBK"
-                "ja_JP.UTF-8/UTF-8"
-                "ja_JP.EUC-JP/EUC-JP"
-            ];
             environment.systemPackages = with pkgs; [
                 wl-clipboard
                 xclip
@@ -34,19 +28,6 @@ in {
                 defaultSession = "plasma";
             };
             services.desktopManager.plasma6.enable = true;
-            i18n.inputMethod = {
-                enable = true;
-                type = "fcitx5";
-                fcitx5 = {
-                    waylandFrontend = true;
-                    addons = with pkgs; [
-                        qt6Packages.fcitx5-chinese-addons
-                        fcitx5-mozc-ut
-                        fcitx5-pinyin-zhwiki
-                        fcitx5-pinyin-moegirl
-                    ];
-                };
-            };
             fonts.enableDefaultPackages = false;
             fonts.packages = with pkgs; [ sarasa-gothic ];
             environment.systemPackages = [(
@@ -74,15 +55,8 @@ in {
             environment.systemPackages = with pkgs; [
                 dconf-editor
                 dconf2nix
+                gnomeExtensions.kimpanel
             ];
-            i18n.inputMethod = {
-                enable = true;
-                type = "ibus";
-                ibus.engines = with pkgs.ibus-engines; [
-                    libpinyin
-                    mozc
-                ];
-            };
         })
         (lib.mkIf (cfg.desktop == "tile") {
             services.displayManager.ly = {
@@ -94,17 +68,6 @@ in {
             };
             programs.niri = {
                 enable = true;
-            };
-            i18n.inputMethod = {
-                enable = true;
-                type = "fcitx5";
-                fcitx5 = {
-                    waylandFrontend = true;
-                    addons = with pkgs; [
-                        qt6Packages.fcitx5-chinese-addons
-                        fcitx5-mozc-ut
-                    ];
-                };
             };
             environment.systemPackages = with pkgs; [
                 yazi
