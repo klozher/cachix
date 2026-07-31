@@ -99,6 +99,10 @@ let
             home.dirs = [".config/wivrn"];
         }
         {
+            condition = osOptOn ["services" "fwupd"];
+            system.dirs = ["/var/lib/fwupd"];
+        }
+        {
             condition = hmOptOn ["programs" "vscode"];
             home.dirs = [".vscode" ".config/Code"];
         }
