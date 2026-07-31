@@ -26,6 +26,7 @@
                         modules/base.nix
                         modules/home-manager
                         modules/state.nix
+                        modules/zsh.nix
                         modules/hardware.nix
                         modules/persist.nix
                         modules/agenix.nix
