@@ -17,7 +17,6 @@ in {
         home-manager.useGlobalPkgs = true;
         home-manager.extraSpecialArgs = { osConfig = config; };
         home-manager.sharedModules = [
-            ./programs.nix
         ];
     };
 }

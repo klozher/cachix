@@ -24,7 +24,7 @@
                     specialArgs = { inherit inputs; };
                     modules = [
                         modules/base.nix
-                        modules/home-manager
+                        modules/home-manager.nix
                         modules/state.nix
                         modules/zsh.nix
                         modules/hardware.nix
