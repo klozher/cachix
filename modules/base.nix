@@ -15,15 +15,15 @@
         ];
         flake-registry = "";
     };
-    nix.registry = {
-        nixpkgs.flake = inputs.nixpkgs;
-        home-manager.flake = inputs.home-manager;
-    };
     nix.gc = {
         automatic = true;
         dates = "weekly";
         options = "--delete-older-than 7d";
     };
+    nix.registry = lib.mapAttrs (name: value: { flake = value; }) inputs;
+    system.extraDependencies = let
+        collectFlakeInputs = input: [ input ] ++ builtins.concatMap collectFlakeInputs (builtins.attrValues (input.inputs or {}));
+    in builtins.concatMap collectFlakeInputs (builtins.attrValues inputs);
     nixpkgs.config.allowUnfree= true;
 
     services.openssh.enable = true;
