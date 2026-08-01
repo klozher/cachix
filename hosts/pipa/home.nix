@@ -2,9 +2,10 @@
 let
     pipa-pwrkey-handler = pkgs.writeShellApplication {
         name = "pipa-pwrkey-handler";
-        runtimeInputs = with pkgs; [ systemd evtest ];
+        runtimeInputs = with pkgs; [ systemd evtest dconf ];
         text = ''
             PWRKEY_PATH="/dev/input/by-path/platform-c440000.spmi-platform-c440000.spmi:pmic@0:pon@800:pwrkey-event"
+            dconf write "/org/gnome/settings-daemon/plugins/power/power-button-action" "'nothing'";
             function toggle_screen {
                 busctl --user call org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver Lock &
             }
