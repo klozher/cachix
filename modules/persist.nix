@@ -39,6 +39,7 @@ let
                 "Desktop" "Downloads" "Documents" "Games"
                 ".local/share/applications"
                 "projects"
+                "containers"
             ];
         }
         {
