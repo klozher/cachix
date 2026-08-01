@@ -66,6 +66,25 @@ in {
     environment.persistence."/persist" = {
         directories = [ "media/downloads" ];
     };
+
+    networking.firewall = {
+        trustedInterfaces = [ "Meta" ];
+        # 80 nginx
+        # 2049 NFSv4
+        # 8080 9090 9777 kodi
+        allowedTCPPorts = [ 80 2049 8080 9090 9777 ];
+        # 10000-10100 for any service require public ports
+        allowedTCPPortRanges = [ { from = 10000; to = 10100; } ];
+        allowedUDPPortRanges = [ { from = 10000; to = 10100; } ];
+    };
+    services.nfs.server = {
+        enable = true;
+        exports = ''
+            /media      192.168.1.0/24(insecure,rw,sync,no_subtree_check,crossmnt,fsid=0)
+            /media/hdd0 192.168.1.0/24(insecure,rw,sync,no_subtree_check)
+            /media/hdd1 192.168.1.0/24(insecure,rw,sync,no_subtree_check)
+        '';
+    };
     services.mihomo = {
         enable = true;
         tunMode = true;
@@ -210,15 +229,5 @@ in {
             "read only" = "yes";
             "guest ok" = "yes";
         };
-    };
-    networking.firewall = {
-        enable = false;
-        trustedInterfaces = [ "Meta" ];
-        # 80 nginx
-        # 8080 9090 9777 kodi
-        allowedTCPPorts = [ 80 8080 9090 9777 ];
-        # 10000-10100 for any service require public ports
-        allowedTCPPortRanges = [ { from = 10000; to = 10100; } ];
-        allowedUDPPortRanges = [ { from = 10000; to = 10100; } ];
     };
 }

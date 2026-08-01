@@ -42,18 +42,6 @@
                       [ "noatime" "compress-force=zstd" ];
         };
     };
-    services.nfs.server = {
-        enable = true;
-        exports = ''
-            /media      192.168.1.0/24(insecure,rw,sync,no_subtree_check,crossmnt,fsid=0)
-            /media/hdd0 192.168.1.0/24(insecure,rw,sync,no_subtree_check)
-            /media/hdd1 192.168.1.0/24(insecure,rw,sync,no_subtree_check)
-        '';
-    };
-    networking.firewall.allowedTCPPorts = [
-        2049 #NFSv4
-    ];
-    networking.networkmanager.enable = true;
     hardware = {
         firmware = [ pkgs.linux-firmware ];
         graphics.enable = true;

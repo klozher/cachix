@@ -33,7 +33,6 @@
     };
     services.xserver.videoDrivers = [ "nvidia" ];
     services.pipewire.enable = true;
-    networking.networkmanager.enable = true;
     hardware = {
         firmware = [ pkgs.linux-firmware ];
         graphics.enable = true;

@@ -31,8 +31,6 @@
         };
     };
     services.pipewire.enable = true;
-    networking.firewall.enable = false;
-    networking.networkmanager.enable = true;
     hardware = {
         firmware = [ pkgs.linux-firmware ];
         graphics.enable = true;

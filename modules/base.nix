@@ -20,22 +20,14 @@
         dates = "weekly";
         options = "--delete-older-than 7d";
     };
+    nixpkgs.config.allowUnfree = true;
+
     nix.registry = lib.mapAttrs (name: value: { flake = value; }) inputs;
     system.extraDependencies = let
         collectFlakeInputs = input: [ input ] ++ builtins.concatMap collectFlakeInputs (builtins.attrValues (input.inputs or {}));
     in builtins.concatMap collectFlakeInputs (builtins.attrValues inputs);
-    nixpkgs.config.allowUnfree= true;
-
-    services.openssh.enable = true;
-    services.openssh.startWhenNeeded = true;
-    services.openssh.settings.PasswordAuthentication = false;
-
-    services.resolved.enable = true;
-    networking.nftables.enable = true;
 
     time.timeZone = "Asia/Shanghai";
-    i18n.defaultLocale = "en_US.UTF-8";
-    i18n.extraLocales = [ "zh_CN.UTF-8/UTF-8" ];
 
     users.mutableUsers = false;
     users.users.sice = {

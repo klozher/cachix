@@ -25,11 +25,6 @@
         clash-verge.serviceMode = true;
         virt-manager.enable = true;
     };
-    networking.firewall = {
-        enable = false;
-        allowedTCPPorts = [ 3389 10030 ];
-        allowedUDPPorts = [ 3389 10030 ];
-    };
     services.scx.enable = true;
     services.scx.scheduler = "scx_lavd";
 

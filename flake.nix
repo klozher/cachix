@@ -33,6 +33,7 @@
                         modules/agenix.nix
                         modules/nixvim.nix
                         modules/desktop.nix
+                        modules/network.nix
                         hosts/${host}
                         {
                             networking.hostName = host;
