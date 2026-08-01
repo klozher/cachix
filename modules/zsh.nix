@@ -20,6 +20,9 @@
                 utility.safeOps = true;
                 prompt.theme = "agnoster";
             };
+            shellAliases = {
+                "wake-giga" = "${pkgs.wakeonlan}/bin/wakeonlan 74:d4:35:89:f3:fb";
+            };
         };
     })];
 }
