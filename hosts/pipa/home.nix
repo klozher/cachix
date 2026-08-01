@@ -39,8 +39,7 @@ in {
         caffeine
         screen-rotate
         app-grid-wizard
-        forge
-        battery-health-charging
+        touchshell
     ]);
     home.file.".local/share/nautilus/scripts/umu-launcher" = {
         text = ''
