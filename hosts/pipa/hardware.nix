@@ -3,6 +3,7 @@
     boot = {
         kernelPackages = pkgs.linuxPackagesFor pkgs.linux_pipa;
         kernelParams = [
+            "video=DSI-1:panel_orientation=right_side_up"
             "resume=/dev/disk/by-partlabel/super"
 #          "zswap.enabled=1" "zswap.compressor=zstd" "zswap.max_pool_percent=20" "zswap.shrinker_enabled=1"
         ];
@@ -141,8 +142,9 @@
         pipewire.enable = false;
         pulseaudio.enable = true;
         fwupd.enable = true;
-        udev.packages = with pkgs; [ pipa-device bootmac ];
+        udev.packages = with pkgs; [ bootmac ];
         udev.extraRules = ''
+            SUBSYSTEM=="misc", KERNEL=="fastrpc-*",     ENV{ACCEL_MOUNT_MATRIX}+="0, 1, 0; -1, 0, 0; 0, 0, 1"
             SUBSYSTEM=="misc", KERNEL=="fastrpc-adsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
             SUBSYSTEM=="misc", KERNEL=="fastrpc-sdsp*", ENV{IIO_SENSOR_PROXY_TYPE}+="ssc-accel ssc-proximity"
         '';
