@@ -9,8 +9,11 @@ let
                 ((osConfig.environment.systemPackages or []) ++ (hmConfig.home.packages or []))
             )
         );
-        osOptOn = option: lib.attrByPath (option ++ ["enable"]) false osConfig;
-        hmOptOn = option: lib.attrByPath (option ++ ["enable"]) false hmConfig;
+        isOptOn = cfg: option:
+            (lib.attrByPath option false cfg) == true ||
+            (lib.attrByPath (option ++ ["enable"]) false cfg);
+        osOptOn = isOptOn osConfig;
+        hmOptOn = isOptOn hmConfig;
     in [
         {
             condition = true;
@@ -23,35 +26,62 @@ let
             condition = true;
             system.files = [
                 "/etc/machine-id"
+            ];
+            system.dirs = [
+                "/etc/nixos"
+                "/var/log"
+                "/var/lib/nixos"
+                "/var/lib/kodi"
+                "/var/lib/containers"
+            ];
+            home.files = [];
+            home.dirs = [
+                "Desktop" "Downloads" "Documents" "Games"
+                ".local/share/applications"
+                "projects"
+            ];
+        }
+        {
+            condition = osOptOn ["services" "openssh"];
+            system.files = [
                 "/etc/ssh/ssh_host_rsa_key"
                 "/etc/ssh/ssh_host_rsa_key.pub"
                 "/etc/ssh/ssh_host_ed25519_key"
                 "/etc/ssh/ssh_host_ed25519_key.pub"
             ];
-            system.dirs = [
-                "/etc/nixos"
-                "/etc/mihomo"
-                "/etc/NetworkManager/system-connections"
-                "/etc/coolercontrol"
-                "/var/log"
-                "/var/lib/kodi"
-                "/var/lib/nixos"
-                "/var/lib/alsa"
-                "/var/lib/samba"
-                "/var/lib/waydroid"
-                "/var/lib/bluetooth"
-                "/var/lib/containers"
-                "/var/lib/libvirt"
-            ];
-            home.files = [];
-            home.dirs = [
-                "Desktop" "Downloads" "Documents" "Games"
-                ".ssh" ".config/zsh" ".config/git"
-                ".config/pulse" ".local/state/wireplumber"
-                ".config/fcitx5"
-                ".local/share/applications"
-                "projects"
-            ];
+            home.dirs = [ ".ssh" ];
+        }
+        {
+            condition = osOptOn ["hardware" "alsa" "enablePersistence"];
+            system.dirs = [ "/var/lib/alsa" ];
+        }
+        {
+            condition = osOptOn ["services" "pulseaudio"];
+            home.dirs = [ ".config/pulse" ];
+        }
+        {
+            condition = osOptOn ["services" "pipewire"];
+            home.dirs = [ ".local/state/wireplumber" ];
+        }
+        {
+            condition = osOptOn ["hardware" "bluetooth"];
+            system.dirs = [ "/var/lib/bluetooth" ];
+        }
+        {
+            condition = (osOptOn ["programs" "zsh"]) || (hmOptOn ["programs" "zsh"]);
+            home.dirs = [ ".config/zsh" ];
+        }
+        {
+            condition = osOptOn ["networking" "networkmanager"];
+            system.dirs = [ "/etc/NetworkManager/system-connections" ];
+        }
+        {
+            condition = osOptOn ["services" "samba"];
+            system.dirs = [ "/var/lib/samba" ];
+        }
+        {
+            condition = osOptOn ["virtualisation" "waydroid"];
+            system.dirs = [ "/var/lib/waydroid" ];
         }
         {
             condition = osOptOn ["programs" "dconf"];
@@ -88,6 +118,7 @@ let
         }
         {
             condition = osOptOn ["programs" "coolercontrol"];
+            system.dirs = [ "/etc/coolercontrol" ];
             home.dirs = [".config/org.coolercontrol.CoolerControl"];
         }
         {
@@ -96,6 +127,7 @@ let
         }
         {
             condition = osOptOn ["programs" "clash-verge"];
+            systems.dirs = [ "/etc/mihomo" ];
             home.dirs = [".local/share/io.github.clash-verge-rev.clash-verge-rev"];
         }
         {
@@ -105,6 +137,10 @@ let
         {
             condition = osOptOn ["services" "fwupd"];
             system.dirs = ["/var/lib/fwupd"];
+        }
+        {
+            condition = osOptOn ["klozher" "i18n"];
+            home.dirs = [".config/fcitx5"];
         }
         {
             condition = hmOptOn ["programs" "vscode"];
@@ -126,6 +162,10 @@ let
         {
             condition = hmOptOn ["services" "podman"];
             home.dirs = [".local/share/containers"];
+        }
+        {
+            condition = hasPkg "git";
+            home.dirs = [".config/git"];
         }
         {
             condition = hasPkg "qq";
