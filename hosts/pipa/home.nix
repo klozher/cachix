@@ -53,15 +53,6 @@ in {
         PROTONPATH = "proton-cachyos";
         #PROTON_ENABLE_WAYLAND=1;
     };
-    dconf = {
-        enable = true;
-        settings."org/gnome/shell".enabled-extensions = with pkgs.gnomeExtensions; [
-          screen-rotate.extensionUuid
-          gsconnect.extensionUuid
-          gjs-osk.extensionUuid
-        ];
-        settings."org/gnome/settings-daemon/plugins/power".power-button-action = "nothing";
-    };
         systemd.user.services = {
             pipa-pwrkey-handler = {
                 Unit.Description = "Custom power key script";

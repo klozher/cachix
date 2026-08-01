@@ -46,12 +46,16 @@ let
             home.files = [];
             home.dirs = [
                 "Desktop" "Downloads" "Documents" "Games"
-                ".ssh" ".config/zsh" ".config/dconf" ".config/git"
+                ".ssh" ".config/zsh" ".config/git"
                 ".config/pulse" ".local/state/wireplumber"
                 ".config/fcitx5"
                 ".local/share/applications"
                 "projects"
             ];
+        }
+        {
+            condition = osOptOn ["programs" "dconf"];
+            home.dirs = [".config/dconf"];
         }
         {
             condition = osOptOn ["programs" "steam"];

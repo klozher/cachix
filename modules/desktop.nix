@@ -57,6 +57,9 @@ in {
                 dconf2nix
                 gnomeExtensions.kimpanel
             ];
+            programs.dconf.profiles.user.databases = [{
+                settings."org/gnome/shell".enabled-extensions = ["kimpanel@kde.org"];
+            }];
         })
         (lib.mkIf (cfg.desktop == "tile") {
             services.displayManager.ly = {
