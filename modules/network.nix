@@ -8,6 +8,9 @@
 
     networking.nftables.enable = true;
 
+    # TODO: disable for now since router not work with ipv6
+    networking.enableIPv6 = false;
+
     networking.firewall = {
         allowedUDPPorts = [ 5353 ];
     };
