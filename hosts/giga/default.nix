@@ -1,10 +1,13 @@
 { config, pkgs, lib, inputs, ... }:
 let
-    kodi = pkgs.kodi-gbm.withPackages (pkgs: with pkgs; [
+    kodi = (pkgs.kodi-gbm.withPackages (pkgs: with pkgs; [
         jellyfin
-    ]);
+    ])).overrideAttrs {
+        passthru.providedSessions = [ "kodi-gbm" ];
+    };
     inhibitor = pkgs.writeShellApplication {
         name = "inhibitor";
+        runtimeInputs = with pkgs; [ systemd ];
         text = ''
             while true; do
                 busy=false;
@@ -31,23 +34,20 @@ in {
     klozher.home-manager.enable = true;
     klozher.home-manager.users.sice = import ./home.nix;
 
+    security.polkit.enable = true;
     users.users.kodi = {
         isNormalUser = true;
         home = "/var/lib/kodi";
         extraGroups = [ "video" "render" "audio" "input" ];
     };
-    services.getty.autologinUser = "kodi";
-    services.greetd = {
+    services.displayManager = {
         enable = true;
-        settings.initial_session = {
-            command = "${kodi}/bin/kodi-standalone";
-            user = "kodi";
-        };
-        settings.default_session = {
-            command = "${kodi}/bin/kodi-standalone";
-            user = "kodi";
-        };
+        ly.enable = true;
+        autoLogin.user = "kodi";
+        sessionPackages = [ kodi ];
+        defaultSession = "kodi-gbm";
     };
+    environment.systemPackages = [ kodi ];
 
     services.pulseaudio.enable = false;
     services.pipewire.enable = false;
