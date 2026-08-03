@@ -107,6 +107,7 @@ in {
             environment = {
                 http_proxy = "http://host.containers.internal:10200";
                 https_proxy = "http://host.containers.internal:10200";
+                no_proxy = "localhost,127.0.0.1,*.local";
             };
             ports = [ "10100:8096" ];
             volumes = [
