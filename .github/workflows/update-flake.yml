@@ -58,7 +58,7 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Build current flake
-        run: nix build .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel --show-trace
+        run: nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
 
       - name: Download updated lockfile
         uses: actions/download-artifact@v8
@@ -66,7 +66,7 @@ jobs:
           name: updated-flake-lock
 
       - name: Build updated flake
-        run: nix build .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel --show-trace
+        run: nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
 
   push-inputs:
     needs: build
