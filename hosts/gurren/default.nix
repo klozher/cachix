@@ -28,6 +28,12 @@
     services.scx.enable = true;
     services.scx.scheduler = "scx_lavd";
 
+    services.ollama = {
+        enable = true;
+        package = pkgs.ollama-cuda;
+        loadModels = [ "qwen3.5:9b" "deepseek-r1:8b" ];
+    };
+
     services.wivrn = {
         enable = true;
         package = (pkgs.wivrn.override { cudaSupport = true; });

@@ -140,6 +140,10 @@ let
             system.dirs = ["/var/lib/fwupd"];
         }
         {
+            condition = osOptOn ["services" "ollama"];
+            system.dirs = ["/var/lib/private/ollama"];
+        }
+        {
             condition = osOptOn ["klozher" "i18n"];
             home.dirs = [".config/fcitx5"];
         }
