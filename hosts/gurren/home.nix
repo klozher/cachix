@@ -18,6 +18,8 @@
 
         qq
         wechat
+
+        cherry-studio
     ];
     home.sessionVariables = {
         QT_IM_MODULE="fcitx";
