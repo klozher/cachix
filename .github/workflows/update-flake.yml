@@ -29,17 +29,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        hostname: [giga, gurren, lagann, t50, pipa]
+        update_lock: [false, true]
         include:
-          - hostname: "gurren"
-            os: "ubuntu-24.04"
-          - hostname: "pipa"
-            os: "ubuntu-24.04-arm"
           - hostname: "giga"
+            os: "ubuntu-24.04"
+          - hostname: "gurren"
             os: "ubuntu-24.04"
           - hostname: "lagann"
             os: "ubuntu-24.04"
           - hostname: "t50"
             os: "ubuntu-24.04"
+          - hostname: "pipa"
+            os: "ubuntu-24.04-arm"
 
     needs: update-lock
     runs-on: ${{ matrix.os }}
@@ -57,21 +59,19 @@ jobs:
           name: klozher
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
-      - name: Build current flake
-        run: nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
-
       - name: Download updated lockfile
+        if: ${{ matrix.update_lock }}
         uses: actions/download-artifact@v8
         with:
           name: updated-flake-lock
 
       - name: Build updated flake
+        continue-on-error: ${{ matrix.update_lock == false }}
         run: nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
 
   push-inputs:
     needs: build
     runs-on: ubuntu-latest
-    if: success()
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -102,7 +102,6 @@ jobs:
   create-pr:
     needs: build
     runs-on: ubuntu-latest
-    if: success()
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
