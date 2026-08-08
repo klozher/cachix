@@ -30,7 +30,7 @@ jobs:
       fail-fast: false
       matrix:
         hostname: [giga, gurren, lagann, t50, pipa]
-        update_lock: [false, true]
+        flake: [current_flake, updated_flake]
         include:
           - hostname: "giga"
             os: "ubuntu-24.04"
@@ -60,13 +60,13 @@ jobs:
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
 
       - name: Download updated lockfile
-        if: ${{ matrix.update_lock }}
+        if: ${{ matrix.flake == 'updated_flake' }}
         uses: actions/download-artifact@v8
         with:
           name: updated-flake-lock
 
-      - name: Build updated flake
-        continue-on-error: ${{ matrix.update_lock == false }}
+      - name: Build system
+        continue-on-error: ${{ matrix.flake == 'current_flake' }}
         run: nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
 
   push-inputs:
@@ -122,3 +122,4 @@ jobs:
           body: |
             This is an automated PR to update `flake.lock`.
             All hosts builds passed successfully.
+
