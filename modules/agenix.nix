@@ -13,7 +13,8 @@ in {
             "/persist/etc/ssh/ssh_host_ed25519_key"
         ];
         age.secrets = {
-            passwd.file = ./secrets/passwd.age;
+            passwd.file = ../secrets/passwd.age;
+            aikey.file = ../secrets/aikey.age;
         };
         users.users.sice.hashedPasswordFile = config.age.secrets.passwd.path;
     };
