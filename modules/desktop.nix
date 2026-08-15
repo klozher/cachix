@@ -5,7 +5,7 @@ in {
     options.klozher.desktop = {
         enable = lib.mkEnableOption "Enable desktop";
         desktop = lib.mkOption {
-            type = lib.types.enum [ "plasma" "gnome" "tile" ];
+            type = lib.types.enum [ "plasma" "gnome" "hyprland" ];
         };
     };
     config = lib.mkIf cfg.enable (lib.mkMerge [
@@ -62,7 +62,7 @@ in {
                 settings."org/gnome/shell".enabled-extensions = ["kimpanel@kde.org"];
             }];
         })
-        (lib.mkIf (cfg.desktop == "tile") {
+        (lib.mkIf (cfg.desktop == "hyprland") {
             services.displayManager.ly = {
                 enable = true;
             };
@@ -70,15 +70,41 @@ in {
                 enable = true;
                 withUWSM = true;
             };
-            programs.niri = {
-                enable = true;
-            };
+            home-manager.sharedModules = [({lib, config, osConfig, ...}: {
+                services.hypridle = {
+                    enable = true;
+                    settings = with pkgs; {
+                        general = {
+                            lock_cmd = "${procps}/bin/pidof hyprlock || ${hyprlock}/bin/hyprlock";
+                            before_sleep_cmd = "${systemd}/bin/loginctl lock-session";
+                            after_sleep_cmd = "${hyprland}/bin/hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
+                        };
+                        listener = [{
+                            timeout = 300;
+                            on-timeout = "${systemd}/bin/loginctl lock-session";
+                        } {
+                            timeout = 330;
+                            on-timeout = "${hyprland}/bin/hyprctl dispatch 'hl.dsp.dpms({ action = \"disable\" })'";
+                            on-resume = "${hyprland}/bin/hyprctl dispatch 'hl.dsp.dpms({ action = \"enable\" })'";
+                        }];
+                    };
+                };
+                programs.ashell = {
+                    enable = true;
+                    systemd.enable = true;
+                    settings = {
+                        modules.left = [ "WindowTitle" ];
+                        modules.center = [ "Notifications" ];
+                        modules.right = [ "Tray" "Settings" "Workspaces" "Tempo" ];
+                    };
+                };
+            })];
             environment.systemPackages = with pkgs; [
                 yazi
                 kitty
-                fuzzel
-                waybar
                 hyprlauncher
+                hyprlock
+                hypridle
             ];
         })
     ]);

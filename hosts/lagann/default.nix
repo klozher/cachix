@@ -4,7 +4,7 @@
     klozher.persist.enable = true;
     klozher.agenix.enable = true;
     klozher.desktop.enable = true;
-    klozher.desktop.desktop = "tile";
+    klozher.desktop.desktop = "hyprland";
     klozher.neovim.enable = true;
     klozher.home-manager.enable = true;
     klozher.home-manager.users.sice = import ./home.nix;
