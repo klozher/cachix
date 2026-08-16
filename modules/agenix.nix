@@ -17,6 +17,15 @@ in {
             aikey.file = ../secrets/aikey.age;
         };
         users.users.sice.hashedPasswordFile = config.age.secrets.passwd.path;
+        home-manager.sharedModules = [
+            inputs.agenix.homeManagerModules.default
+            ({...}: {
+                age.secrets = {
+                    aikey.file = ../secrets/aikey.age;
+                    zhipu.file = ../secrets/zhipu.age;
+                };
+            })
+        ];
     };
 }
 

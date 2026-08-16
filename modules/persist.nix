@@ -157,8 +157,7 @@ let
         }
         {
             condition = hmOptOn ["programs" "aider-chat"];
-            home.files = [".aider.conf.yml"];
-            home.dirs = [".aider"];
+            home.dirs = [".config/aider"];
         }
         {
             condition = hmOptOn ["programs" "obs-studio"];
@@ -167,6 +166,10 @@ let
         {
             condition = hmOptOn ["services" "podman"];
             home.dirs = [".local/share/containers"];
+        }
+        {
+            condition = hmOptOn ["programs" "claude-code"];
+            home.dirs = [".claude"];
         }
         {
             condition = hasPkg "git";

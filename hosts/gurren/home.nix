@@ -148,4 +148,7 @@
             obs-vkcapture
         ];
     };
+    programs.claude-code = {
+        enable = true;
+    };
 }

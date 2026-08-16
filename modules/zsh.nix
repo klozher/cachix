@@ -22,6 +22,10 @@
             };
             shellAliases = {
                 "wake-giga" = "${pkgs.wakeonlan}/bin/wakeonlan 74:d4:35:89:f3:fb";
+                "env-zhipu" = "env $(< ${config.age.secrets.zhipu.path})";
+                "aider" = "${pkgs.aider-chat}/bin/aider --config ${config.xdg.configHome}/aider/config.yml";
+                "aider-zhipu" = "env-zhipu aider";
+                "claude-zhipu" = "env-zhipu claude";
             };
         };
     })];
