@@ -144,7 +144,7 @@ let
             system.dirs = ["/var/lib/private/ollama"];
         }
         {
-            condition = osOptOn ["klozher" "i18n"];
+            condition = osOptOn ["i18n" "inputMethod"];
             home.dirs = [".config/fcitx5"];
         }
         {

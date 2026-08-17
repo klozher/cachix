@@ -1,13 +1,9 @@
 { config, lib, pkgs, inputs, ... }:
 let
-    cfg = config.klozher.i18n;
+    cfg = config.klozher.desktop;
 in {
-    options.klozher.i18n = {
-        enable = lib.mkEnableOption "Enable i18n support";
-    };
     config = lib.mkIf cfg.enable {
         i18n = {
-            defaultLocale = "en_US.UTF-8";
             extraLocales = [
                 "zh_CN.UTF-8/UTF-8"
                 "zh_CN.GB18030/GB18030"
