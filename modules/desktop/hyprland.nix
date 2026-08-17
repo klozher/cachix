@@ -45,6 +45,10 @@ in {
                     modules.right = [ "Notifications" "Tray" "Settings" "Workspaces" "Tempo" ];
                 };
             };
+            services.kdeconnect = {
+                enable = true;
+                indicator = true;
+            };
         })];
     };
 }

@@ -16,7 +16,6 @@ in {
         };
         fonts.enableDefaultPackages = false;
         fonts.packages = with pkgs; [ sarasa-gothic ];
-        programs.kdeconnect.package = pkgs.gnomeExtensions.gsconnect;
         environment.systemPackages = with pkgs; [
             dconf-editor
             dconf2nix
@@ -25,6 +24,12 @@ in {
         programs.dconf.profiles.user.databases = [{
             settings."org/gnome/shell".enabled-extensions = ["kimpanel@kde.org"];
         }];
+        home-manager.sharedModules = [({lib, config, osConfig, pkgs, ...}: {
+            services.kdeconnect = {
+                enable = true;
+                package = pkgs.gnomeExtensions.gsconnect;
+            };
+        })];
     };
 }
 

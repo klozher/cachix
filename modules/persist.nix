@@ -114,10 +114,6 @@ let
             home.dirs = [".config/niri"];
         }
         {
-            condition = osOptOn ["programs" "kdeconnect"];
-            home.dirs = [".config/kdeconnect"];
-        }
-        {
             condition = osOptOn ["programs" "coolercontrol"];
             system.dirs = [ "/etc/coolercontrol" ];
             home.dirs = [".config/org.coolercontrol.CoolerControl"];
@@ -170,6 +166,10 @@ let
         {
             condition = hmOptOn ["programs" "claude-code"];
             home.dirs = [".claude"];
+        }
+        {
+            condition = hmOptOn ["services" "kdeconnect"];
+            home.dirs = [".config/kdeconnect"];
         }
         {
             condition = hasPkg "git";

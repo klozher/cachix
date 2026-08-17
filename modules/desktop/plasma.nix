@@ -3,9 +3,6 @@ let
     cfg = config.klozher.desktop;
 in {
     config = lib.mkIf (cfg.enable && cfg.desktop == "plasma") {
-        home-manager.sharedModules = [
-            inputs.plasma-manager.homeModules.plasma-manager
-        ];
         services.displayManager = {
             enable = true;
             plasma-login-manager.enable = true;
@@ -20,6 +17,14 @@ in {
                 package = pkgs.kdePackages.yakuake;
             }
         ) pkgs.kdePackages.yakuake ];
+        home-manager.sharedModules = [
+            inputs.plasma-manager.homeModules.plasma-manager
+            ({lib, config, osConfig, pkgs, ...}: {
+                services.kdeconnect = {
+                    enable = true;
+                };
+            })
+        ];
     };
 }
 

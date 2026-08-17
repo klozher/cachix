@@ -17,7 +17,6 @@ in {
     config = lib.mkIf cfg.enable {
         fonts.packages = [ pkgs.nerd-fonts.symbols-only ];
         networking.networkmanager.enable = true;
-        programs.kdeconnect.enable = true;
         environment.systemPackages = with pkgs; [
             wl-clipboard
             xclip
