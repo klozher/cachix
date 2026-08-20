@@ -14,6 +14,7 @@ ninja,
 makeWrapper,
 coreutils,
 gnugrep,util-linux,gnused,bluez,gawk,iproute2,
+writeShellApplication,
 ...}@pkgs: rec {
     pmports = fetchFromGitLab {
         domain = "gitlab.postmarketos.org";
@@ -147,5 +148,10 @@ gnugrep,util-linux,gnused,bluez,gawk,iproute2,
             };
         }];
     }) {};
+    external-grub-loader = writeShellApplication {
+        name = "external-grub-loader";
+        runtimeInputs = [ util-linux coreutils ];
+        text = builtins.readFile ./external-grub-loader.sh;
+    };
 }
 

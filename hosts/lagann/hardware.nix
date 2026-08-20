@@ -1,12 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 {
     boot = {
-        loader.timeout = null;
-        loader.grub.enable = true;
-        loader.grub.device = "nodev";
-        loader.grub.efiSupport = true;
-        loader.grub.efiInstallAsRemovable = true;
-        loader.efi.canTouchEfiVariables = false;
+        loader.external.enable = true;
+        loader.external.installHook = "${pkgs.external-grub-loader}/bin/external-grub-loader";
         kernelParams = [ "usb-storage.quirks=152d:a580:u" ];
         initrd.kernelModules = [ "usb-storage" ];
         initrd.systemd.enable = true;
