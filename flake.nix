@@ -16,7 +16,12 @@
         flake-parts.lib.mkFlake { inherit inputs; } {
             systems = import systems;
             perSystem = { config, self', inputs', pkgs, system, ... }: {
-                packages = import ./packages { inherit pkgs; };
+                packages = pkgs.lib.filterAttrs
+                    (_: v: pkgs.lib.isDerivation v)
+                    (pkgs.lib.filesystem.packagesFromDirectoryRecursive {
+                        inherit (pkgs) callPackage newScope;
+                        directory = ./packages;
+                    });
             };
             flake = let
                 nixosFor = host: system: nixpkgs.lib.nixosSystem {
