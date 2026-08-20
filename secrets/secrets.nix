@@ -28,4 +28,8 @@ in
         publicKeys = all_keys;
         armor = true;
     };
+    "jellyfin.age" = {
+        publicKeys = all_keys;
+        armor = true;
+    };
 }

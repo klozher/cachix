@@ -5,27 +5,6 @@ let
     ])).overrideAttrs {
         passthru.providedSessions = [ "kodi-gbm" ];
     };
-    inhibitor = pkgs.writeShellApplication {
-        name = "inhibitor";
-        runtimeInputs = with pkgs; [ systemd ];
-        text = ''
-            while true; do
-                busy=false;
-                # test nfs client
-                NFS_CLIENT="/proc/fs/nfsd/clients/";
-                if [ -d "$NFS_CLIENT" ]; then
-                    if [ -n "$(find "$NFS_CLIENT" -mindepth 1)" ]; then
-                        busy=true;
-                    fi
-                fi
-                # mark session busy
-                if [ "$busy" = "true" ]; then
-                    touch /dev/tty1;
-                fi
-                sleep 1m;
-            done
-            '';
-    };
 in {
     imports = [
         ./hardware.nix
@@ -59,11 +38,12 @@ in {
         IdleActionSec="30m";
         IdleAction="suspend-then-hibernate";
     };
-    systemd.services.custom-inhibitor = {
-        description = "Inhibit system from sleep";
+    systemd.services.jellyfin-inhibitor = {
+        description = "Inhibit system from idle when jellyfin playing video";
         wantedBy = [ "multi-user.target" ];
         serviceConfig.Type = "exec";
-        serviceConfig.ExecStart = "${inhibitor}/bin/inhibitor";
+        serviceConfig.EnvironmentFile = config.age.secrets.jellyfin.path;
+        serviceConfig.ExecStart = "${pkgs.jellyfin-inhibitor}/bin/jellyfin-inhibitor";
     };
 
     environment.persistence."/persist" = {

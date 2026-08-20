@@ -15,6 +15,7 @@ in {
         age.secrets = {
             passwd.file = ../secrets/passwd.age;
             aikey.file = ../secrets/aikey.age;
+            jellyfin.file = ../secrets/jellyfin.age;
         };
         users.users.sice.hashedPasswordFile = config.age.secrets.passwd.path;
         home-manager.sharedModules = [
