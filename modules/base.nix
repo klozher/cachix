@@ -7,10 +7,12 @@
             "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=35"
             # cache.nixos.org
             "https://nix-community.cachix.org?priority=41"
+            "https://cache.nixos-cuda.org?priority=42"
             "https://klozher.cachix.org?priority=50"
         ];
         trusted-public-keys = [
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
             "klozher.cachix.org-1:ohD7Cqxgjj2vLp4m+5vW4x4TVn0C2LVk6qeCZ7faEm8="
         ];
         flake-registry = "";
