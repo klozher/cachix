@@ -1,4 +1,4 @@
-{lib, pmports, writeText, buildLinux, fetchurl}:
+{lib, pmports, writeText, buildLinux, fetchurl, ...}:
 let
     fsa4480-nodev-fix = writeText "fsa4480-nodev-fix.patch" ''
         diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
