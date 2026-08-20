@@ -16,7 +16,7 @@
         flake-parts.lib.mkFlake { inherit inputs; } {
             systems = import systems;
             perSystem = { config, self', inputs', pkgs, system, ... }: {
-                packages = pkgs.callPackages packages/pipa.nix {};
+                packages = import ./packages { inherit pkgs; };
             };
             flake = let
                 nixosFor = host: system: nixpkgs.lib.nixosSystem {
