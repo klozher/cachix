@@ -176,7 +176,7 @@ in {
             "_".locations."/".return = "444";
         };
     };
-    home-manager.sharedModules = [{
+    home-manager.users.sice = {
         services.podman = {
             enable = true;
             networks.media-app-net = {};
@@ -195,6 +195,6 @@ in {
                 };
             }) containers;
         };
-    }];
+    };
 }
 

@@ -6,9 +6,8 @@
     klozher.desktop.enable = true;
     klozher.desktop.desktop = "hyprland";
     klozher.neovim.enable = true;
-    klozher.home-manager.enable = true;
-    klozher.home-manager.users.sice = import ./home.nix;
 
+    home-manager.users.sice = import ./home.nix;
     services.displayManager.ly.enable = true;
     programs = {
         clash-verge.enable = true;

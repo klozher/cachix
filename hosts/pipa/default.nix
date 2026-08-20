@@ -6,9 +6,8 @@
     klozher.desktop.enable = true;
     klozher.desktop.desktop = "gnome";
     klozher.neovim.enable = true;
-    klozher.home-manager.enable = true;
-    klozher.home-manager.users.sice = import ./home.nix;
 
+    home-manager.users.sice = import ./home.nix;
     virtualisation.waydroid.enable = true;
     services.tlp.enable = true;
     services.tlp.pd.enable = true;

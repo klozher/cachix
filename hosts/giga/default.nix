@@ -13,9 +13,8 @@ in {
     klozher.persist.enable = true;
     klozher.agenix.enable = true;
     klozher.neovim.enable = true;
-    klozher.home-manager.enable = true;
-    klozher.home-manager.users.sice = import ./home.nix;
 
+    home-manager.users.sice = import ./home.nix;
     security.polkit.enable = true;
     users.users.kodi = {
         isNormalUser = true;

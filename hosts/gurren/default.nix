@@ -9,9 +9,8 @@
     klozher.desktop.enable = true;
     klozher.desktop.desktop = "plasma";
     klozher.neovim.enable = true;
-    klozher.home-manager.enable = true;
-    klozher.home-manager.users.sice = import ./home.nix;
 
+    home-manager.users.sice = import ./home.nix;
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
     boot.kernelModules = ["ntsync"];
     programs = {
