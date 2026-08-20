@@ -8,7 +8,7 @@
         systemd-boot.enable = true;
     };
 
-    boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux_pipa;
+    boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linux-pipa;
     hardware.deviceTree = {
         enable = true;
         name = "qcom/sm8250-xiaomi-pipa-csot.dtb";
