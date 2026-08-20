@@ -124,8 +124,11 @@ let
             home.dirs = [".config/openrazer"];
         }
         {
+            condition = osOptOn ["services" "mihomo"];
+            system.dirs = [ "/etc/mihomo" ];
+        }
+        {
             condition = osOptOn ["programs" "clash-verge"];
-            systems.dirs = [ "/etc/mihomo" ];
             home.dirs = [".local/share/io.github.clash-verge-rev.clash-verge-rev"];
         }
         {
