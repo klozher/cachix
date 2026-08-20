@@ -33,6 +33,7 @@ let
                 "/var/lib/nixos"
                 "/var/lib/kodi"
                 "/var/lib/containers"
+                "/var/lib/systemd/timers"
             ];
             home.files = [];
             home.dirs = [
