@@ -49,4 +49,6 @@
             users = [ "sice" ];
         };
     };
+    # 7.5 for 2080s
+    nixpkgs.config.cudaCapabilities = [ "7.5" ];
 }
