@@ -16,10 +16,10 @@
         flake-parts.lib.mkFlake { inherit inputs; } {
             systems = import systems;
             perSystem = { config, self', inputs', pkgs, system, ... }: {
-                packages = pkgs.lib.filterAttrs
-                    (_: v: pkgs.lib.isDerivation v)
-                    (pkgs.lib.filesystem.packagesFromDirectoryRecursive {
-                        inherit (pkgs) callPackage newScope;
+                packages = with pkgs; lib.filterAttrs
+                    (_: v: lib.isDerivation v)
+                    (lib.filesystem.packagesFromDirectoryRecursive {
+                        inherit callPackage newScope;
                         directory = ./packages;
                     });
             };
