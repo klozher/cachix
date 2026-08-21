@@ -55,8 +55,7 @@ else                                                       # e.g. tmpfs: fall ba
     echo "warning: $boot has no UUID/LABEL, entries use plain paths" >&2
 fi
 emit ""
-emit "set default=0"
-emit "set timeout=5"
+emit "set timeout=-1"
 emit ""
 
 # --- copyToKernelsDir: install a kernel/initrd under $boot, return GRUB path --
