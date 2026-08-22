@@ -21,13 +21,6 @@ let
                 containerPort = "3000";
             };
             environment = {
-                PROXY_HOST = "socks5h://host.containers.internal:10200";
-                MOVIEPILOT_AUTO_UPDATE = "false";
-                AUTO_UPDATE_RESOURCE = "false";
-                TMDB_SCRAP_ORIGINAL_IMAGE = "true";
-                AUTH_SITE = "hddolby";
-                HDDOLBY_ID = "27729";
-                HDDOLBY_PASSKEY = "b6ac5096b5c203d582cb3034f2ccc4d5";
             };
             volumes = [
                 "%h/containers/moviepilot/config:/config:z"
@@ -179,7 +172,7 @@ in {
             networks.media-app-net = {};
             containers = lib.mapAttrs (name: cfg: {
                 inherit (cfg) image;
-                network = [ "media-app-net" ];
+                network = [ "media-app-net:--map-gw" ];
                 volumes = (cfg.volumes or []) ++ [ "/media:/media:Z" ];
                 ports = (cfg.ports or [])
                     ++ (if builtins.hasAttr "web" cfg
