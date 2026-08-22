@@ -24,10 +24,7 @@ let
                 PROXY_HOST = "socks5h://host.containers.internal:10200";
                 MOVIEPILOT_AUTO_UPDATE = "false";
                 AUTO_UPDATE_RESOURCE = "false";
-                # disable downloading image since it's often wrong language
-                FANART_ENABLE = "false";
-                #TMDB_IMAGE_DOMAIN = "localhost";
-                #TMDB_SCRAP_ORIGINAL_IMAGE = "true";
+                TMDB_SCRAP_ORIGINAL_IMAGE = "true";
                 AUTH_SITE = "hddolby";
                 HDDOLBY_ID = "27729";
                 HDDOLBY_PASSKEY = "b6ac5096b5c203d582cb3034f2ccc4d5";
