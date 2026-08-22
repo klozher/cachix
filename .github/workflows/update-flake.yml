@@ -69,8 +69,8 @@ jobs:
         continue-on-error: ${{ matrix.flake == 'current_flake' }}
         run: |
           export NIX_CONFIG="
-          substituters = $(nix eval --json .\#nixosConfigurations.${{ matrix.hostname }}.config.nix.settings.substituters | nix run nixpkgs\#jq -- -r 'join(" ")')
-          trusted-public-keys = $(nix eval --json .\#nixosConfigurations.${{ matrix.hostname }}.config.nix.settings.trusted-public-keys | nix run nixpkgs\#jq -- -r 'join(" ")')
+          extra-substituters = $(nix eval --json .\#nixosConfigurations.${{ matrix.hostname }}.config.nix.settings.extra-substituters | nix run nixpkgs\#jq -- -r 'join(" ")')
+          extra-trusted-public-keys = $(nix eval --json .\#nixosConfigurations.${{ matrix.hostname }}.config.nix.settings.extra-trusted-public-keys | nix run nixpkgs\#jq -- -r 'join(" ")')
           "
           nix build --keep-going --show-trace .#nixosConfigurations.${{ matrix.hostname }}.config.system.build.toplevel
 

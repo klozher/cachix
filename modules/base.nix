@@ -4,13 +4,15 @@
         experimental-features = [ "nix-command" "flakes" ];
         substituters = [
             "https://mirrors.ustc.edu.cn/nix-channels/store?priority=30"
-            "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=35"
-            # cache.nixos.org
+            "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store?priority=31"
+            "https://cache.nixos.org?priority=40"
+        ];
+        extra-substituters = [
             "https://nix-community.cachix.org?priority=41"
             "https://cache.nixos-cuda.org?priority=42"
             "https://klozher.cachix.org?priority=50"
         ];
-        trusted-public-keys = [
+        extra-trusted-public-keys = [
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
             "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
             "klozher.cachix.org-1:ohD7Cqxgjj2vLp4m+5vW4x4TVn0C2LVk6qeCZ7faEm8="
