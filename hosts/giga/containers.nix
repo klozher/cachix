@@ -8,6 +8,9 @@ let
                 containerPort = "8096";
             };
             environment = {
+                HTTP_PROXY="http://host.containers.internal:10200";
+                HTTPS_PROXY="http://host.containers.internal:10200";
+                NO_PROXY="localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,169.254.1.2/24,host.containers.internal";
             };
             volumes = [
                 "%h/containers/jellyfin/config:/config:Z"
