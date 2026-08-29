@@ -18,7 +18,7 @@ let
             ];
         };
         moviepilot = {
-            image = "docker.io/jxxghp/moviepilot-v2";
+            image = "docker.io/jxxghp/moviepilot-v3";
             web = {
                 hostPort = "10110";
                 containerPort = "3000";
