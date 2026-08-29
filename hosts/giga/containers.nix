@@ -172,10 +172,13 @@ in {
     home-manager.users.sice = {
         services.podman = {
             enable = true;
-            networks.media-app-net = {};
+            networks.media-app-net = {
+                #TODO: does this really work?
+                extraPodmanArgs=[ "--map-gw" ];
+            };
             containers = lib.mapAttrs (name: cfg: {
                 inherit (cfg) image;
-                network = [ "media-app-net:--map-gw" ];
+                network = [ "media-app-net" ];
                 volumes = (cfg.volumes or []) ++ [ "/media:/media:Z" ];
                 ports = (cfg.ports or [])
                     ++ (if builtins.hasAttr "web" cfg
