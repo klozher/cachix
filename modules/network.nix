@@ -13,6 +13,14 @@
 
     networking.firewall = {
         allowedUDPPorts = [ 5353 ];
+        allowedTCPPortRanges = [{
+            from = 1716;
+            to = 1746;
+        }];
+        allowedUDPPortRanges = [{
+            from = 1716;
+            to = 1746;
+        }];
     };
 }
 
