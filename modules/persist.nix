@@ -87,6 +87,10 @@ let
             system.dirs = [ "/var/lib/iwd" ];
         }
         {
+            condition = osOptOn ["services" "displayManager" "ly"];
+            system.dirs = [ "/etc/ly" ];
+        }
+        {
             condition = osOptOn ["services" "samba"];
             system.dirs = [ "/var/lib/samba" ];
         }

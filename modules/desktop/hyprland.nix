@@ -3,8 +3,13 @@ let
     cfg = config.klozher.desktop;
 in {
     config = lib.mkIf (cfg.enable && cfg.desktop == "hyprland") {
-        services.displayManager.ly = {
-            enable = true;
+        services.displayManager = {
+            ly = {
+                enable = true;
+                settings = {
+                    default_input = "password";
+                };
+            };
         };
         programs.hyprland = {
             enable = true;
