@@ -16,6 +16,7 @@ in {
             passwd.file = ../secrets/passwd.age;
             aikey.file = ../secrets/aikey.age;
             jellyfin.file = ../secrets/jellyfin.age;
+            qbittorrent.file = ../secrets/qbittorrent.age;
         };
         users.users.sice.hashedPasswordFile = config.age.secrets.passwd.path;
         home-manager.sharedModules = [

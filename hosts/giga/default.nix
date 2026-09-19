@@ -37,12 +37,12 @@ in {
         IdleActionSec="30m";
         IdleAction="suspend-then-hibernate";
     };
-    systemd.services.jellyfin-inhibitor = {
-        description = "Inhibit system from idle when jellyfin playing video";
+    systemd.services.custom-inhibitor = {
+        description = "Inhibit system from idle";
         wantedBy = [ "multi-user.target" ];
         serviceConfig.Type = "exec";
-        serviceConfig.EnvironmentFile = config.age.secrets.jellyfin.path;
-        serviceConfig.ExecStart = "${pkgs.jellyfin-inhibitor}/bin/jellyfin-inhibitor";
+        serviceConfig.EnvironmentFile = [config.age.secrets.jellyfin.path config.age.secrets.qbittorrent.path];
+        serviceConfig.ExecStart = "${pkgs.custom-inhibitor}/bin/custom-inhibitor";
     };
 
     environment.persistence."/persist" = {

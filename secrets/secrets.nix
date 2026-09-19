@@ -32,4 +32,8 @@ in
         publicKeys = all_keys;
         armor = true;
     };
+    "qbittorrent.age" = {
+        publicKeys = all_keys;
+        armor = true;
+    };
 }
