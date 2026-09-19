@@ -72,47 +72,47 @@ let
                 "%h/containers/peerbanhelper/data:/app/data:Z"
             ];
         };
-        radarr = {
-            image = "lscr.io/linuxserver/radarr";
-            web = {
-                hostPort = "10150";
-                containerPort = "7878";
-            };
-            volumes = [
-                "%h/containers/radarr/config:/config:z"
-            ];
-        };
-        sonarr = {
-            image = "lscr.io/linuxserver/sonarr";
-            web = {
-                hostPort = "10160";
-                containerPort = "8989";
-            };
-            volumes = [
-                "%h/containers/sonarr/config:/config:z"
-                "/media:/media:Z"
-            ];
-        };
-        prowlarr = {
-            image = "lscr.io/linuxserver/prowlarr";
-            web = {
-                hostPort = "10170";
-                containerPort = "9696";
-            };
-            volumes = [
-                "%h/containers/prowlarr/config:/config:z"
-            ];
-        };
-        medusa = {
-            image = "docker.io/pymedusa/medusa";
-            web = {
-                hostPort = "10180";
-                containerPort = "8081";
-            };
-            volumes = [
-                "%h/containers/medusa/config:/config:z"
-            ];
-        };
+        #radarr = {
+        #    image = "lscr.io/linuxserver/radarr";
+        #    web = {
+        #        hostPort = "10150";
+        #        containerPort = "7878";
+        #    };
+        #    volumes = [
+        #        "%h/containers/radarr/config:/config:z"
+        #    ];
+        #};
+        #sonarr = {
+        #    image = "lscr.io/linuxserver/sonarr";
+        #    web = {
+        #        hostPort = "10160";
+        #        containerPort = "8989";
+        #    };
+        #    volumes = [
+        #        "%h/containers/sonarr/config:/config:z"
+        #        "/media:/media:Z"
+        #    ];
+        #};
+        #prowlarr = {
+        #    image = "lscr.io/linuxserver/prowlarr";
+        #    web = {
+        #        hostPort = "10170";
+        #        containerPort = "9696";
+        #    };
+        #    volumes = [
+        #        "%h/containers/prowlarr/config:/config:z"
+        #    ];
+        #};
+        #medusa = {
+        #    image = "docker.io/pymedusa/medusa";
+        #    web = {
+        #        hostPort = "10180";
+        #        containerPort = "8081";
+        #    };
+        #    volumes = [
+        #        "%h/containers/medusa/config:/config:z"
+        #    ];
+        #};
     };
 in {
     networking.firewall = {
