@@ -1,10 +1,8 @@
 { config, pkgs, lib, inputs, ... }:
 let
-    kodi = (pkgs.kodi-gbm.withPackages (pkgs: with pkgs; [
+    kodi = pkgs.kodi-gbm.withPackages (pkgs: with pkgs; [
         jellyfin
-    ])).overrideAttrs {
-        passthru.providedSessions = [ "kodi-gbm" ];
-    };
+    ]);
 in {
     imports = [
         ./hardware.nix
@@ -21,13 +19,19 @@ in {
         home = "/var/lib/kodi";
         extraGroups = [ "video" "render" "audio" "input" ];
     };
-    services.displayManager = {
+    services.greetd = {
         enable = true;
-        ly.enable = true;
-        autoLogin.user = "kodi";
-        sessionPackages = [ kodi ];
-        defaultSession = "kodi-gbm";
+        settings = {
+            default_session = {
+                command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd $SHELL";
+            };
+            initial_session = {
+                command = "${kodi}/bin/kodi-standalone";
+                user = "kodi";
+            };
+        };
     };
+
     environment.systemPackages = [ kodi ];
 
     services.pulseaudio.enable = false;
