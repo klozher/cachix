@@ -24,7 +24,7 @@
     home.sessionVariables = {
         QT_IM_MODULE="fcitx";
         MOZ_DISABLE_RDD_SANDBOX = "1";
-        PROTONPATH = "GE-Latest";
+        PROTONPATH = "$HOME/.local/share/Steam/compatibilitytools.d/GE-Proton-latest";
         PROTON_ENABLE_WAYLAND=1;
         PROTON_ENABLE_HDR=1;
         PROTON_ENABLE_NVAPI=1;
