@@ -13,6 +13,7 @@
         tmp.tmpfsSize = "100%";
         plymouth.enable = true;
         resumeDevice = "/dev/disk/by-uuid/8f2bb26d-df41-432d-a92f-82371b42932e";
+        supportedFilesystems = [ "nfs" ];
     };
 
     swapDevices = [ { device = "/dev/disk/by-uuid/8f2bb26d-df41-432d-a92f-82371b42932e"; } ];
