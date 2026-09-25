@@ -58,6 +58,11 @@ let
             system.dirs = [ "/var/lib/alsa" ];
         }
         {
+            condition = osOptOn ["services" "flatpak"];
+            system.dirs = [ "/var/lib/flatpak" ];
+            home.dirs = [ ".local/share/flatpak" ".var/app" ];
+        }
+        {
             condition = osOptOn ["services" "pulseaudio"];
             home.dirs = [ ".config/pulse" ];
         }

@@ -45,6 +45,7 @@
         openFirewall = true;
         usershares.enable = true;
     };
+    services.flatpak.enable = true;
     environment.systemPackages = with pkgs; [
         wayvr
         #TODO: disable stardust-xr for now
