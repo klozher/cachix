@@ -14,6 +14,10 @@ in {
                 vaults."Documents/japanese".enable = true;
                 defaultSettings.app = {
                     legacyThirdPartyPlugins = true;
+                    vimMode = true;
+                };
+                defaultSettings.hotkeys = {
+                    "markdown:toggle-preview" = [];
                 };
                 defaultSettings.communityPlugins = [{
                     enable = true;
