@@ -20,9 +20,14 @@ in {
             dconf-editor
             dconf2nix
             gnomeExtensions.kimpanel
+            gnomeExtensions.appindicator
         ];
         programs.dconf.profiles.user.databases = [{
-            settings."org/gnome/shell".enabled-extensions = ["kimpanel@kde.org"];
+            settings."org/gnome/shell".enabled-extensions = [
+                "kimpanel@kde.org"
+                "appindicatorsupport@rgcjonas.gmail.com"
+                "gsconnect@andyholmes.github.io"
+            ];
         }];
         home-manager.sharedModules = [({lib, config, osConfig, pkgs, ...}: {
             services.kdeconnect = {
