@@ -83,6 +83,10 @@ let
             system.dirs = [ "/etc/NetworkManager/system-connections" ];
         }
         {
+            condition = osOptOn ["networking" "wireless" "iwd"];
+            system.dirs = [ "/var/lib/iwd" ];
+        }
+        {
             condition = osOptOn ["services" "samba"];
             system.dirs = [ "/var/lib/samba" ];
         }

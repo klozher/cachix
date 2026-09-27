@@ -198,6 +198,7 @@
     #networking.firewall.allowedUDPPorts = [67];
     ## disable random mac address
     #networking.networkmanager.wifi.scanRandMacAddress = false;
+    networking.networkmanager.wifi.backend = "iwd";
     #kernelModules = [
     #    #for network interface usb0
     #    "g_ether"
