@@ -14,6 +14,12 @@
     services.tlp.pd.enable = true;
     services.power-profiles-daemon.enable = false;
 
+    programs = {
+        clash-verge.enable = true;
+        clash-verge.tunMode = true;
+        clash-verge.serviceMode = true;
+    };
+
     environment.sessionVariables = {
         XDG_DATA_DIRS = [ "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}" ];
     };
