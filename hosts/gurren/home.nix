@@ -151,4 +151,7 @@
     programs.claude-code = {
         enable = true;
     };
+    programs.obsidian = {
+        enable = true;
+    };
 }

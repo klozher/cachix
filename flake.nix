@@ -10,6 +10,7 @@
         agenix.url = "github:ryantm/agenix";
         nixvim.url = "github:nix-community/nixvim";
         nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
+        obsidian-extensions.url = "github:karaolidis/nix-obsidian-extensions";
     };
 
     outputs = { self, nixpkgs, flake-parts, systems, ... }@inputs:
@@ -38,6 +39,7 @@
                         modules/nixvim.nix
                         modules/network.nix
                         modules/desktop
+                        modules/obsidian.nix
                         hosts/${host}
                         {
                             networking.hostName = host;
