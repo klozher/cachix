@@ -38,6 +38,7 @@
         hardware.nvidia = {
             open = true;
             package = config.boot.kernelPackages.nvidiaPackages.stable;
+            powerManagement.enable = true;
         };
     };
     specialisation.NVIDIA-580.configuration = {
@@ -45,6 +46,7 @@
         hardware.nvidia = {
             open = false;
             package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+            powerManagement.enable = true;
         };
     };
 }
