@@ -38,7 +38,7 @@
         firmware = [ pkgs.linux-firmware ];
         graphics.enable = true;
         nvidia = {
-            open = true;
+            open = false;
             package = config.boot.kernelPackages.nvidiaPackages.bleeding_edge;
             powerManagement.enable = true;
             nvidiaPersistenced = true;
