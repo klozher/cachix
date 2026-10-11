@@ -25,6 +25,7 @@ in {
                 age.secrets = {
                     aikey.file = ../secrets/aikey.age;
                     zhipu.file = ../secrets/zhipu.age;
+                    piauth.file = ../secrets/piauth.age;
                 };
             })
         ];

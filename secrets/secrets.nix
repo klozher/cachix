@@ -24,6 +24,10 @@ in
         publicKeys = all_keys;
         armor = true;
     };
+    "piauth.age" = {
+        publicKeys = all_keys;
+        armor = true;
+    };
     "zhipu.age" = {
         publicKeys = all_keys;
         armor = true;

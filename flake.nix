@@ -40,6 +40,7 @@
                         modules/network.nix
                         modules/desktop
                         modules/obsidian.nix
+                        modules/ai.nix
                         hosts/${host}
                         {
                             networking.hostName = host;

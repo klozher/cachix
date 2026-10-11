@@ -62,8 +62,5 @@ in {
         };
     programs.aider-chat.enable = true;
     programs.firefox.enable = true;
-    programs.claude-code = {
-        enable = true;
-    };
 }
 

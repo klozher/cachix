@@ -10,6 +10,7 @@
     klozher.desktop.desktop = "plasma";
     klozher.neovim.enable = true;
     klozher.obsidian.enable = true;
+    klozher.ai.enable = true;
 
     home-manager.users.sice = import ./home.nix;
     boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

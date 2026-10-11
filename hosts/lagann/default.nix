@@ -7,6 +7,7 @@
     klozher.desktop.desktop = "hyprland";
     klozher.neovim.enable = true;
     klozher.obsidian.enable = true;
+    klozher.ai.enable = true;
 
     home-manager.users.sice = import ./home.nix;
     services.displayManager.ly.enable = true;
