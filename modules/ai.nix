@@ -14,6 +14,7 @@ in {
             programs.pi-coding-agent = {
                 enable = true;
                 configDir = "${config.xdg.configHome}/pi/agent";
+                extraPackages = with pkgs; [ python3 ];
                 appendSystem = ''
                     # CRITICAL TERMINAL CONSTRAINT
                     - You are strictly FORBIDDEN from using `sudo` or attempting to gain root privileges under any circumstances.
