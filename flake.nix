@@ -11,6 +11,26 @@
         nixvim.url = "github:nix-community/nixvim";
         nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
         obsidian-extensions.url = "github:karaolidis/nix-obsidian-extensions";
+
+        # make inputs that depend on other inputs use this flake's version
+        home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+        impermanence.inputs.nixpkgs.follows = "nixpkgs";
+        impermanence.inputs.home-manager.follows = "home-manager";
+
+        plasma-manager.inputs.nixpkgs.follows = "nixpkgs";
+        plasma-manager.inputs.home-manager.follows = "home-manager";
+
+        agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+        nixvim.inputs.nixpkgs.follows = "nixpkgs";
+        nixvim.inputs.flake-parts.follows = "flake-parts";
+        nixvim.inputs.systems.follows = "systems";
+
+        nixpkgs-xr.inputs.nixpkgs.follows = "nixpkgs";
+        nixpkgs-xr.inputs.systems.follows = "systems";
+
+        obsidian-extensions.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     outputs = { self, nixpkgs, flake-parts, systems, ... }@inputs:
