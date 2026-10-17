@@ -17,13 +17,13 @@ let
     '';
 in buildLinux {
     src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v7.x/linux-7.1.4.tar.xz";
-        hash = "sha256-HGOSKhGWddOOOuD49u4H8VxBp4arntZlY3SbuMmgji4=";
+        url = "mirror://kernel/linux/kernel/v7.x/linux-7.2.4.tar.xz";
+        hash = "sha256-AXEO4Bc32sSS8brlK+zQV+CNINEViQiaoGrM/0FcKN0=";
     };
-    version = "7.1.4";
+    version = "7.2.4";
     isLTS = false;
-    modDirVersion = lib.versions.pad 3 "7.1.4";
-    extraMeta.branch = "7.1";
+    modDirVersion = lib.versions.pad 3 "7.2.4";
+    extraMeta.branch = "7.2";
     kernelPatches = [{
         patch = "${fsa4480-nodev-fix}";
     } {
@@ -65,12 +65,14 @@ in buildLinux {
             KEYBOARD_XIAOMI_NANOSIC803 = lib.kernel.module;
         };
     } {
-        patch = "${pmports}/device/testing/linux-xiaomi-pipa/0014-UPSTREAM-libbpf-Fix-UAF-in-strset__add_str.patch";
-    } {
         patch = "${pmports}/device/testing/linux-xiaomi-pipa/0016-power-supply-add-nuvolta-rx1665-wireless-charger.patch";
         structuredExtraConfig = {
             FUDA_1665 = lib.kernel.module;
         };
+    } {
+        patch = "${pmports}/device/testing/linux-xiaomi-pipa/0017-arm64-dts-qcom-pipa-restrict-charging-to-5-V.patch";
+    } {
+        patch = "${pmports}/device/testing/linux-xiaomi-pipa/0018-power-supply-qcom_pm8150b-correct-float-voltage-programming.patch";
     }];
 }
 
