@@ -58,8 +58,5 @@
         #stardust-xr-kiara
     ];
     #programs.cdemu.enable = true;
-    programs.coolercontrol = {
-        enable = true;
-    };
 }
 

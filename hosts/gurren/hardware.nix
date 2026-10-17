@@ -50,6 +50,7 @@
             users = [ "sice" ];
         };
     };
+    programs.coolercontrol.enable = true;
     # 7.5 for 2080s
     nixpkgs.config.cudaCapabilities = [ "7.5" ];
 }
