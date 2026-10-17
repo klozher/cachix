@@ -65,7 +65,19 @@ jobs:
         with:
           name: updated-flake-lock
 
+      - name: Check if imported lock file is unchanged
+        id: lock
+        if: ${{ matrix.flake == 'updated_flake' }}
+        run: |
+          if git diff --quiet -- flake.lock; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Imported flake.lock is identical to the one in the repo — skipping build"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build system
+        if: ${{ matrix.flake != 'updated_flake' || steps.lock.outputs.skip != 'true' }}
         continue-on-error: ${{ matrix.flake == 'current_flake' }}
         run: |
           export NIX_CONFIG="
