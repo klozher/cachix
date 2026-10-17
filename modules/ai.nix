@@ -85,6 +85,9 @@ in {
                         path = "/etc/ssh";
                         type = "tmpfs";
                     } {
+                        path = "${config.home.homeDirectory}/.cache";
+                        type = "tmpfs";
+                    } {
                         path = "${config.home.homeDirectory}/.ssh";
                         type = "tmpfs";
                     } {
@@ -95,6 +98,7 @@ in {
                         type = "tmpfs";
                     }];
                     in pkgs.writeShellScriptBin "pi" ''
+                        export NPM_CONFIG_CACHE=/tmp/.npm-cache
                         exec ${lib.getExe pkgs.bubblewrap} \
                         ${shellArgs (bwrapArgs mountpoints)} \
                         -- ${lib.getExe pkgs.pi-coding-agent} "$@"
