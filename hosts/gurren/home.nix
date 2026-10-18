@@ -34,7 +34,6 @@
     xdg.autostart = {
         enable = true;
         entries = map (name: "${config.home.profileDirectory}/share/applications/" + name + ".desktop") [
-            "jellyfin-mpv-shim"
             "wechat"
             "qq"
         ];
