@@ -14,7 +14,6 @@ in {
         ];
         age.secrets = {
             passwd.file = ../secrets/passwd.age;
-            aikey.file = ../secrets/aikey.age;
             jellyfin.file = ../secrets/jellyfin.age;
             qbittorrent.file = ../secrets/qbittorrent.age;
         };
@@ -23,9 +22,7 @@ in {
             inputs.agenix.homeManagerModules.default
             ({...}: {
                 age.secrets = {
-                    aikey.file = ../secrets/aikey.age;
-                    zhipu.file = ../secrets/zhipu.age;
-                    piauth.file = ../secrets/piauth.age;
+                    "aikeys.env".file = ../secrets/aikeys.env.age;
                 };
             })
         ];

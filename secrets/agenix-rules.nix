@@ -20,15 +20,7 @@ in
         publicKeys = all_keys;
         armor = true;
     };
-    "aikey.age" = {
-        publicKeys = all_keys;
-        armor = true;
-    };
-    "piauth.age" = {
-        publicKeys = all_keys;
-        armor = true;
-    };
-    "zhipu.age" = {
+    "aikeys.env.age" = {
         publicKeys = all_keys;
         armor = true;
     };

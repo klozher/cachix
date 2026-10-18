@@ -36,11 +36,14 @@ in {
             home.persistence."/persist".directories = [
                 "${config.xdg.configHome}/pi/agent"
             ];
+            programs.zsh.shellAliases = {
+                "env-zhipu" = "/usr/bin/env $(< ${config.age.secrets."aikeys.env".path})";
+                "claude-zhipu" = "env-zhipu claude";
+            };
             programs.claude-code = {
                 enable = true;
             };
             # pi-coding-agent
-            age.secrets.piauth.path = "${config.programs.pi-coding-agent.configDir}/auth.json";
             programs.pi-coding-agent = {
                 enable = true;
                 package = let
@@ -98,7 +101,11 @@ in {
                         type = "tmpfs";
                     }];
                     in pkgs.writeShellScriptBin "pi" ''
-                        export NPM_CONFIG_CACHE=/tmp/.npm-cache
+                        set -a
+                        source ${config.age.secrets."aikeys.env".path}
+                        NPM_CONFIG_CACHE=/tmp/.npm-cache
+                        set +a
+
                         exec ${lib.getExe pkgs.bubblewrap} \
                         ${shellArgs (bwrapArgs mountpoints)} \
                         -- ${lib.getExe pkgs.pi-coding-agent} "$@"
@@ -116,9 +123,15 @@ in {
                     - **UNFREE EXEMPTION:** If running an unfree/proprietary package via Nix, you MUST prepend the environment variable: `NIXPKGS_ALLOW_UNFREE=1 nix run ...`
                     - **PROJECT CONTEXT:** Prioritize modern `nix develop` over legacy `nix-shell` if a `flake.nix` is present in the working directory.
                 '';
-                settings.packages = [
-                    "npm:pi-web-access"
-                ];
+                settings = {
+                    extensions = [
+                    ];
+                    packages = [
+                        "npm:pi-web-access"
+                        "npm:@narumitw/pi-usage"
+                        "npm:pi-zai-mcp"
+                    ];
+                };
             };
         })];
     };
