@@ -46,72 +46,53 @@ in {
             # pi-coding-agent
             programs.pi-coding-agent = {
                 enable = true;
-                package = let
-                    shellArgs = args: lib.concatStringsSep " " (map (arg: "\"${arg}\"") args);
-                    bwrapArgs = mounts: lib.concatMap ( mount:
-                        if mount.type == "rw" then [ "--bind-try" mount.path mount.path ]
-                        else if mount.type == "ro" then [ "--ro-bind-try" mount.path mount.path ]
-                        else if mount.type == "dev" then [ "--dev-bind" mount.path mount.path ]
-                        else if mount.type == "tmpfs" then [ "--dir" mount.path "--tmpfs" mount.path ]
-                        else if mount.type == "null" then [ "--ro-bind-try" "/dev/null" mount.path ]
-                        else throw "Unknown mount type"
-                    ) mounts;
-                    # the mount order is intentional
-                    mountpoints = [{
-                        path = "/";
-                        type = "rw";
-                    } {
-                        path = "/dev";
-                        type = "dev";
-                    } {
-                        path = "/etc";
-                        type = "ro";
-                    } {
-                        path = "/home";
-                        type = "ro";
-                    } {
-                        path = "${config.programs.pi-coding-agent.configDir}";
-                        type = "rw";
-                    } {
-                        path = "$PWD";
-                        type = "rw";
-                    } {
-                        path = "$PWD/.git";
-                        type = "ro";
-                    } {
-                        path = "$PWD/.env";
-                        type = "null";
-                    } {
-                        path = "/persist";
-                        type = "tmpfs";
-                    } {
-                        path = "/etc/ssh";
-                        type = "tmpfs";
-                    } {
-                        path = "${config.home.homeDirectory}/.cache";
-                        type = "tmpfs";
-                    } {
-                        path = "${config.home.homeDirectory}/.ssh";
-                        type = "tmpfs";
-                    } {
-                        path = "${config.xdg.configHome}/zsh";
-                        type = "tmpfs";
-                    } {
-                        path = "${config.xdg.configHome}/mozilla";
-                        type = "tmpfs";
-                    }];
-                    in pkgs.writeShellScriptBin "pi" ''
+                package = pkgs.writeShellScriptBin "pi" ''
                         set -a
                         source ${config.age.secrets."aikeys.env".path}
                         NPM_CONFIG_CACHE=/tmp/.npm-cache
                         set +a
 
-                        exec ${lib.getExe pkgs.bubblewrap} \
-                        ${shellArgs (bwrapArgs mountpoints)} \
+                        ARGS=()
+
+                        function bind_rw {
+                            [[ -e "$1" ]] && ARGS+=("--bind" "$1" "$1")
+                        }
+
+                        function bind_ro {
+                            [[ -e "$1" ]] && ARGS+=("--ro-bind" "$1" "$1")
+                        }
+
+                        function bind_dev {
+                            [[ -e "$1" ]] && ARGS+=("--dev-bind" "$1" "$1")
+                        }
+
+                        function bind_shadow {
+                            [[ -d "$1" ]] && ARGS+=("--tmpfs" "$1")
+                            [[ -f "$1" ]] && ARGS+=("--ro-bind" "/dev/null" "$1")
+                        }
+
+                        function new_dir {
+                            ARGS+=("--dir" "$1")
+                        }
+
+                        bind_rw "/"
+                        bind_dev "/dev"
+                        bind_ro "/etc"
+                        bind_shadow "/persist"
+                        bind_shadow "/etc/ssh"
+
+                        bind_shadow "/home"
+                        new_dir "${config.programs.pi-coding-agent.configDir}"
+                        bind_rw "${config.programs.pi-coding-agent.configDir}"
+                        new_dir "$PWD"
+                        bind_rw "$PWD"
+                        bind_ro "$PWD/.git"
+                        bind_shadow "$PWD/.env"
+
+                        exec ${lib.getExe pkgs.bubblewrap} "''${ARGS[@]}" \
                         -- ${lib.getExe pkgs.pi-coding-agent} "$@"
                 '';
                 configDir = "${config.xdg.configHome}/pi/agent";
-                extraPackages = with pkgs; [ nodejs python3 ];
                 appendSystem = ''
                     # CRITICAL TERMINAL CONSTRAINTS
                     - **ABSOLUTE NO SUDO:** Strictly forbidden from using `sudo` or `su` under any circumstances. If a task fails due to permissions, halt immediately and report it to the user.
@@ -123,6 +104,10 @@ in {
                     - **UNFREE EXEMPTION:** If running an unfree/proprietary package via Nix, you MUST prepend the environment variable: `NIXPKGS_ALLOW_UNFREE=1 nix run ...`
                     - **PROJECT CONTEXT:** Prioritize modern `nix develop` over legacy `nix-shell` if a `flake.nix` is present in the working directory.
                 '';
+                extraPackages = with pkgs; [
+                    nodejs
+                    python3
+                ];
                 settings = {
                     extensions = [
                     ];
@@ -130,6 +115,7 @@ in {
                         "npm:pi-web-access"
                         "npm:@narumitw/pi-usage"
                         "npm:pi-zai-mcp"
+                        "npm:pi-subagents"
                     ];
                 };
             };
