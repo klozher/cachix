@@ -20,8 +20,9 @@ in {
                     "editor:delete-paragraph" = [];
                 };
                 defaultSettings.communityPlugins = [{
-                    enable = true;
                     pkg = pkgs.obsidianPlugins.remotely-save;
+                } {
+                    pkg = pkgs.obsidianPlugins.advanced-ruby;
                 }];
             };
             age.secrets.obsidian-remotely-save.path = "Documents/notes/.obsidian/plugins/remotely-save/data.json";
