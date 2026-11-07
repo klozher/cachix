@@ -17,6 +17,7 @@ in {
                 };
                 defaultSettings.hotkeys = {
                     "markdown:toggle-preview" = [];
+                    "editor:delete-paragraph" = [];
                 };
                 defaultSettings.communityPlugins = [{
                     enable = true;
