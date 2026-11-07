@@ -13,7 +13,6 @@ in {
             ];
             inputMethod = {
                 enable = true;
-                enableGtk2 = true;
                 enableGtk3 = true;
                 type = "fcitx5";
                 fcitx5 = {
