@@ -7,7 +7,6 @@
         kernelPackages = pkgs.linuxPackages;
         kernelParams = [];
         initrd.kernelModules = [ ];
-        initrd.systemd.enable = true;
         tmp.useTmpfs = true;
         tmp.tmpfsSize = "100%";
         plymouth.enable = true;

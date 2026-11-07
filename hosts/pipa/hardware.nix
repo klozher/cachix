@@ -15,7 +15,6 @@
     };
     hardware.firmware = [ pkgs.linux-firmware pkgs.pipa-firmware ];
     boot.initrd = {
-        systemd.enable = true;
         availableKernelModules = [
             # bluetooth and camera only work in real rootfs
             #"hci_uart"

@@ -8,7 +8,6 @@
         kernelParams = [];
         kernelModules = [ "nct6775" ];
         initrd.kernelModules = [ ];
-        initrd.systemd.enable = true;
         tmp.useTmpfs = true;
         tmp.tmpfsSize = "100%";
         plymouth.enable = true;

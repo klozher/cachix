@@ -5,7 +5,6 @@
         loader.external.installHook = "${pkgs.external-grub-loader}/bin/external-grub-loader";
         kernelParams = [ "usb-storage.quirks=152d:a580:u" ];
         initrd.kernelModules = [ "usb-storage" ];
-        initrd.systemd.enable = true;
         tmp.useTmpfs = true;
         tmp.tmpfsSize = "100%";
         supportedFilesystems = [ "bcachefs" ];

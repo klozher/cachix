@@ -6,7 +6,6 @@
         loader.efi.canTouchEfiVariables = true;
         kernelParams = [];
         initrd.kernelModules = [ ];
-        initrd.systemd.enable = true;
         tmp.useTmpfs = true;
         tmp.tmpfsSize = "100%";
         plymouth.enable = true;
