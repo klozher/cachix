@@ -32,4 +32,8 @@ in
         publicKeys = all_keys;
         armor = true;
     };
+    "obsidian-remotely-save.age" = {
+        publicKeys = all_keys;
+        armor = true;
+    };
 }

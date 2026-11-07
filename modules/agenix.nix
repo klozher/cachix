@@ -23,6 +23,7 @@ in {
             ({...}: {
                 age.secrets = {
                     "aikeys.env".file = ../secrets/aikeys.env.age;
+                    obsidian-remotely-save.file = ../secrets/obsidian-remotely-save.age;
                 };
             })
         ];
