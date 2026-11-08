@@ -26,8 +26,8 @@
         clash-verge.serviceMode = true;
         virt-manager.enable = true;
     };
-    services.scx.enable = true;
-    services.scx.scheduler = "scx_lavd";
+    services.scx-loader.enable = true;
+    services.scx-loader.config.default_sched = "scx_lavd";
 
     services.ollama = {
         enable = true;
