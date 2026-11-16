@@ -20,7 +20,8 @@ in {
                     "editor:delete-paragraph" = [];
                 };
                 defaultSettings.communityPlugins = [{
-                    pkg = pkgs.obsidianPlugins.remotely-save;
+                    #pkg = pkgs.obsidianPlugins.remotely-save;
+                    pkg = pkgs.obsidianPlugins.nutstore-sync;
                 } {
                     pkg = pkgs.obsidianPlugins.advanced-ruby;
                 }];
